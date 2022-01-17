@@ -1,6 +1,10 @@
-# Project:	Acindar - Tijeras
-# App:		Frontend Version - Ver 1.0	
-# Comments:   	
+# Project:	Acindar - Tijeras	
+# Description:  Frontend task list
+# *********************************************************
+- 
+- 
+
+
 # *********************************************************
 # @ 2021 TREND Ingeniería SRL - San Nicolás de Los Arroyos, Provincia de Buenos Aires
 # *********************************************************
