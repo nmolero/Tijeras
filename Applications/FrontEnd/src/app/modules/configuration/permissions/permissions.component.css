@@ -1,0 +1,167 @@
+/***************************/
+
+/*Export Excel Style Class*/
+
+#excelButtonCrud
+{
+     background-color: #8cb6a2;
+    border: #8cb6a2 ;
+    margin-top: 0rem;
+    position: relative;
+    float: right;
+
+}
+
+#excelButtonCrud:hover
+{
+    background-color: #70a489;
+
+}
+
+#excelButtonCrud:focus
+{
+    -webkit-box-shadow: 0 0 0 0.2em #aae5aa;
+    -moz-box-shadow: 0 0 0 0.2em #aae5aa;
+     box-shadow: 0 0 0 0.2em #aae5aa;
+}
+
+/***************************/
+/*Panel*/
+
+body .p-panel-header
+{
+    min-width: 0;
+    height: 2rem;
+    padding: 0;
+}
+body .p-panel-content
+{
+    min-height: 4rem;
+    padding: 0.25rem;
+
+}
+
+/***************************/
+
+/*Icons*/
+
+ #deleteButtonIcon .pi-trash::before
+{
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+
+ #excelButtonCrud .pi-file-excel::before
+{
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+
+.pi-sort-alt:before
+{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+.pi-sort-amount-up-alt:before
+{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+.pi-sort-amount-down:before
+{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+/**************************/
+
+
+.module-item {
+	display: flex;
+	align-items: center;
+	padding: .5rem;
+    width: 100%;
+    border-bottom: 1px solid var(--surface-d);
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+}
+
+
+.product-list-detail {
+		flex: 1 1 0;
+
+	}
+
+    .product-list-action {
+		display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        width: 12.5%;
+    }
+
+.product-category-icon {
+        vertical-align: middle;
+        margin-right: .5rem;
+    }
+
+.product-category {
+        vertical-align: middle;
+        line-height: 1;
+    }
+
+
+
+
+
+
+[pDraggable] {
+    cursor: move;
+}
+
+/*******************************/
+/*DropArea*/
+
+.dropableArea
+{
+    /* z-index:100; */
+    border: 2.5px solid #248ED4;
+    border-radius: 4px;
+
+    -webkit-box-shadow: 5px 6px 3px 0px rgba(0,200,255,0.41);
+    box-shadow: 5px 6px 3px 0px rgba(0,200,255,0.41);
+}
+
+
+/**************************************************/
+/*DataView Heder*/
+
+body .p-dataview-header{
+
+}
+
+body .p-dataview-list
+{
+    /* max-height: 10rem; */
+
+}
+
+body .p-dataview-content
+{
+
+}
+
+/***********************************************/
+/*ScrollBar*/
+body .p-scrollpanel-bar{
+    /* background-color: gray; */
+}
+
+body .p-scrollpanel-bar-y
+{
+    /* background-color: gray; */
+}

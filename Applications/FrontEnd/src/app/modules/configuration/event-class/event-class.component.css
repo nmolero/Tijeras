@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.contenedor {
+  width: 93%;
+  margin: auto;
+}
+/* #responsiveTable {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 10px auto;
+  gap: 10px;
+} */
+#responsiveTable {
+  display: flex;
+  margin: 10px auto;
+  gap: 15px;
+}
+div > div:first-child {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+/* ------------------------------------ */
+/* El medo responsive */
+@media screen and (max-width: 450px) {
+  .contenedor {
+    width: 93%;
+  }
+  #responsiveTable {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  div div:nth-child(1) {
+    font-size: 10px;
+  }
+}

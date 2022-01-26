@@ -1,0 +1,75 @@
+/***************************/
+
+/*Export Excel Style Class*/
+
+#excelButtonUsersCrud
+{
+     background-color: #8cb6a2;
+    border: #8cb6a2 ;
+    margin-top: 0rem;
+    position: relative;
+    float: right;
+}
+
+#excelButtonUsersCrud:hover
+{
+    background-color: #70a489;
+
+}
+
+#excelButtonUsersCrud:focus
+{
+    -webkit-box-shadow: 0 0 0 0.2em #aae5aa;
+    -moz-box-shadow: 0 0 0 0.2em #aae5aa;
+     box-shadow: 0 0 0 0.2em #aae5aa;
+}
+
+/***************************/
+/*Panel*/
+
+body .p-panel-header
+{
+    min-width: 0;
+    height: 2rem;
+    padding: 0;
+}
+
+
+/***************************/
+/*Icons*/
+
+ #deleteButtonIcon .pi-trash::before
+{
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+
+ #excelButtonUsersCrud .pi-file-excel::before
+{
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+
+.pi-sort-alt:before
+{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+.pi-sort-amount-up-alt:before
+{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+.pi-sort-amount-down:before
+{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+/**************************/
+
+/*Table*/

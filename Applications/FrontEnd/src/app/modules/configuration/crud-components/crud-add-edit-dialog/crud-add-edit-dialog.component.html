@@ -1,0 +1,70 @@
+<p-dialog keepInViewport="false" modal="true" #dialog blockScroll="true" [header]="header"
+    (onHide)="HandleDialogHide($event)" [(visible)]="visible" [style]="{width: '30vw'}">
+    <div *ngIf="data!==null" style="padding-bottom: 1rem;">
+
+        <div *ngIf="data.deleteEvent">
+            <div class="div">
+                <span style="width : 10rem;">
+                    <label style=" position: relative; font-weight: bold; ">Eliminar evento:</label>
+                </span>
+                <span style="width: 13rem; justify-content: center;">
+                    <p-checkbox [(ngModel)]="data.deleteCheckBoxValue" binary="true" inputId="deleteCheckBox"
+                        (onChange)="HandleDeleteCheckBox()">
+                    </p-checkbox>
+                </span>
+            </div>
+        </div>
+        <div *ngFor="let item of data.formData; let i = index">
+            <div class="div">
+                <span style="width : 10rem;">
+                    <label style=" position: relative; font-weight: bold; ">{{item.label}}:</label>
+                </span>
+
+                <span *ngIf="item.type === inputTypes.INPUT_TEXT">
+                    <input [style]="{'color' : '#414141', 'width':'13rem','position':'relative', 'height': '2rem'}"
+                        pInputText (input)="HandleOnInputParameter()" (input)="HandleValidateForm()"
+                        [disabled]="item.disabled" [type]="item.inputType" [(ngModel)]="item.value"
+                        [placeholder]="item.label">
+                </span>
+
+                <!--
+              <span *ngIf="item.isEditable" style=" position: relative; font-weight: bold; ">hola</span>
+            -->
+
+
+                <p-dropdown *ngIf="item.type === inputTypes.DROPDOWN" appendTo="body" filter="true"
+                    [style]="{'color' : '#414141','min-width':'2rem' ,'width':'13rem','position':'relative'}"
+                    [options]="item.options" [(ngModel)]="item.value" optionLabel="label" [disabled]="item.disabled"
+                    (onChange)="HandleValidateForm()" [disabled]="!item.checkboxValue ? item.checkBox : false">
+                </p-dropdown>
+
+                <!-- <p-checkbox [class.checkBox]="!item.checkBox" [disabled]="!item.checkBox" inputId="checkBox_{{i}}"
+                    (onChange)="checked(i)">
+                </p-checkbox>-->
+                <p-calendar *ngIf="item.type === inputTypes.CALENDAR" [style]="{'width':'13rem'}" [inline]="false"
+                    (onSelect)="HandleValidateForm()" (onInput)="HandleValidateForm()" [disabled]="item.disabled"
+                    appendTo="body" dateFormat="dd/mm/yy " hourFormat="24" [maxDate]="item.configuration.maxDate"
+                    [(ngModel)]="item.value" showTime="true" [showIcon]="true">
+                </p-calendar>
+
+                <p-cascadeSelect *ngIf="item.type === inputTypes.CASCADE" [(ngModel)]="item.value" dataKey="ref_"
+                    appendTo="body" [disabled]="item.disabled" [options]="item.treeOptions" optionLabel="text"
+                    [disabled]="item.disabled" optionGroupLabel="text"
+                    [optionGroupChildren]="['nodes','nodes','nodes','nodes','nodes',]" (onChange)="HandleValidateForm()"
+                    [placeholder]="item.placeholder" [style]="{'minWidth': '2rem', 'width':'13rem'}"
+                    [placeholder]="item.placeholder">
+                </p-cascadeSelect>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button type="button" [(disabled)]="isConfirmButton" pButton icon="pi pi-check" (click)="visible=false"
+            (click)="HandleConfirmButton()" label="Confirmar">
+        </button>
+        <button type="button" pButton icon="pi pi-times" (click)="visible=false" label="Cancelar"
+            class="p-button-secondary">
+        </button>
+    </p-footer>
+
+</p-dialog>

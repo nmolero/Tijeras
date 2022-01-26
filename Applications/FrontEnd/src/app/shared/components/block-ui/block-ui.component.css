@@ -1,0 +1,153 @@
+/* <<< BLOCK UI >>> */
+
+
+.block-ui-template {
+
+    position: absolute;
+    top: 30%;
+    left: 47.5%;
+    bottom: 0;
+    right: 0;
+
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transform: translateY(-50%);
+
+    text-align: center;
+    width: 90px;
+
+    height: 90px;
+
+  }
+
+
+
+  .block-ui-sector{
+
+    border-radius: 50%;
+
+    z-index: 10;
+
+    position: absolute;
+
+    width: 100%;
+
+    height: 100%;
+
+    border: 15px solid transparent;
+
+    mix-blend-mode: overlay;
+
+  }
+
+
+
+  .block-ui-sector-org1{
+
+    animation: rotate 2s ease-out infinite;
+
+    border-top: 15px solid #ff3700;
+
+  }
+
+
+
+  .block-ui-sector-org2{
+
+    animation: rotate 2.5s ease-in infinite;
+
+    border-top: 15px solid #c5bca4;
+
+  }
+
+
+
+  .block-ui-sector-org3{
+
+    animation: rotate 1.5s ease-in-out infinite;
+
+    border-top: 15px solid #696969;
+
+  }
+
+
+
+  .block-ui-text {
+
+    text-align: center;
+
+    font-weight: bold;
+
+    font-size: x-large;
+
+    color: #fff;
+
+    animation: opacity-frame 2s ease-in-out infinite;
+
+  }
+
+
+
+  @keyframes rotate {
+
+    from {transform: rotate(0);}
+
+    to {transform: rotate(360deg);}
+
+  }
+
+
+
+  @keyframes opacity-frame{
+
+    0%, 100% {
+
+      opacity: 1;
+
+    }
+
+    25%, 75% {
+
+      opacity: .5;
+
+    }
+
+    50% {
+
+      opacity: .1;
+
+    }
+
+  }
+
+
+/*********************************/
+
+/******Load Spinner and BlockUi Class***************/
+
+.testReportLoadSpinner
+{
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 225%;
+}
+
+.busyStateClass
+{
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 0;
+
+}
+/********************************/

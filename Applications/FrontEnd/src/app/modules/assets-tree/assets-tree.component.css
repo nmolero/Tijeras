@@ -1,0 +1,63 @@
+/***************************/
+/*Panel*/
+
+
+body .p-panel-header
+{
+    min-height: 0;
+    height: 2rem;
+    padding: 0;
+}
+
+body .p-panel-content
+{
+    min-height: 4rem;
+    padding: 0.25rem;
+
+}
+
+
+/***************************/
+/*Tree Node*/
+
+body .p-tree
+{
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    max-width: none;
+}
+
+body .p-tree-empty-message{
+    text-align: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+
+
+
+/************************/
+
+.font-family{
+    color: #414141;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+/***********************/
+/*Card*/
+body .p-card
+{
+    background-color: #ecedee;
+}
+body .p-card .p-card-content{
+    padding: 0;
+}
+
+/***************************/
+/*ToolBar*/
+
+body .p-toolbar{
+    background-color: #8da7b7;
+}

@@ -1,0 +1,425 @@
+/***************************/
+/* Todo esto se encuentra en la cabecera del CRUD  */
+
+/*Este botón le pertenece a la CVS para descargar la documentación*/
+#excelButton {
+  background-color: #8cb6a2;
+  position: relative;
+  border: #8cb6a2;
+  margin-top: 0rem;
+  color: white;
+  top: 0.5rem;
+  border-radius: 1px;
+}
+#excelButton .pi-file-excel::before {
+  font-size: 1.5rem;
+  font-weight: 100;
+}
+#excelButton:hover {
+  background-color: #70a489;
+}
+#excelButton:focus {
+  -webkit-box-shadow: 0 0 0 0.2em #aae5aa;
+  -moz-box-shadow: 0 0 0 0.2em #aae5aa;
+  box-shadow: 0 0 0 0.2em #aae5aa;
+}
+
+/*****************************************************************************************************************************************/
+/*Panel, es decir la cabecera principal*/
+
+body .p-panel-header {
+  min-height: 0;
+  height: 3rem;
+  padding: 0;
+}
+body .p-panel-content {
+  min-height: 3rem;
+  padding: -0.25rem;
+}
+/*******************************************************************************************************************************************/
+
+/*Float Labels*/
+
+body .p-float-label .p-inputwrapper-focus ~ label {
+  top: -1rem;
+}
+
+body .p-float-label .p-inputwrapper-filled ~ label {
+  top: -1rem;
+}
+
+body .p-float-label label {
+  left: 1rem;
+}
+
+/*************************/
+
+/*Table*/
+
+.notFinishedCell {
+  /* background-color: #ff37001f; */
+  background-color: #1ffa403a;
+}
+
+.eventErrorCell {
+  background-color: #ff00007c;
+  animation-name: flash;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(1);
+}
+
+@keyframes flash {
+  0% {
+    background: #ffff;
+    color: #414141;
+  }
+  50% {
+    background: rgb(185, 34, 34);
+    color: #ffff;
+  }
+}
+
+.semiAutomaticEvent {
+  background-color: rgb(2 136 209);
+  border-radius: 4px;
+  font-weight: 500;
+  font-family: "Roboto";
+  color: white;
+  width: 60%;
+  margin: auto;
+}
+
+/* Esta es la barra con los 7 iconos */
+.tableToolbar {
+  min-height: 2.5rem;
+  background-color: #6892ae;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  vertical-align: middle;
+  align-items: center;
+  width: 93.1%;
+  margin: auto;
+  margin-bottom: -10px;
+}
+/***********************/
+
+/*Filter Button*/
+
+.metTestfilterButton {
+  position: relative;
+  margin-right: 0.65rem;
+  background-color: #e98569;
+  color: #f2f2f2;
+  font-weight: bold;
+  font-size: 0.9rem;
+  font-family: Vagrant;
+  border-radius: 1px 1px;
+  top: -2px;
+}
+
+.metTestfilterButton:hover {
+  background-color: #d15533;
+}
+
+.metTestResetFilterButton {
+  border-radius: 1px 1px;
+  font-size: 0.9rem;
+  font-family: Vagrant;
+  background-color: #d8aa6b;
+  color: #f2f2f2;
+  position: relative;
+  top: -2px;
+}
+
+.metTestResetFilterButton:hover {
+  background-color: #c88f42;
+}
+
+#resetFilterButton {
+  margin-right: 1rem;
+  color: yellow;
+  position: relative;
+  background-color: transparent;
+  top: -0.3rem;
+}
+
+#resetFilterButton:hover {
+  color: #ff3700;
+}
+
+#resetFilterButton:focus {
+  -webkit-box-shadow: 0 0 0 0.2em #868686;
+  -moz-box-shadow: 0 0 0 0.2em #868686;
+  box-shadow: 0 0 0 0.2em #868686;
+}
+
+/**************************/
+/*Overlay*/
+
+/*Arrow*/
+body #overlayPanel .p-overlaypanel:after {
+  left: 27.6rem;
+}
+
+body #overlayPanel .p-overlaypanel:before {
+  left: 27.6rem;
+}
+/*************/
+
+/*paramREport Arrow*/
+body #paramReportOverlayPanel .p-overlaypanel:after {
+  /* left: 27.6rem; */
+  display: none;
+}
+
+body #paramReportOverlayPanel .p-overlaypanel:before {
+  /* left: 27.6rem; */
+  display: none;
+}
+/*******************/
+
+body #paramReportOverlayPanel .p-overlaypanel {
+  /* background-color: rgba(65, 65, 65, 0.65); */
+  background-color: rgba(123, 123, 123, 0.85);
+}
+
+body #paramReportOverlayPanel .p-overlaypanel-content {
+  padding-left: 0;
+  padding-right: 0;
+}
+body .p-overlaypanel .p-component {
+  opacity: 0.95;
+}
+
+/**************************************/
+
+/*DataView*/
+
+body #paramReportDataView .p-dataview .p-component {
+  background-color: transparent;
+}
+
+body #paramReportDataView .p-dataview .p-dataview-content {
+  background: transparent;
+  border: none;
+}
+
+body #paramReportDataView .p-dataview.p-dataview-list {
+  padding-right: 0.5rem;
+}
+
+body
+  #paramReportDataView
+  .p-dataview.p-dataview-list
+  .p-dataview-content
+  > .p-grid
+  > div {
+  border: none;
+}
+
+body #paramReportDataView .p-dataview-emptymessage {
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
+.activeFilter {
+  background-color: #ff5d003d;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/******************************/
+
+body .pi-info-circle {
+  color: #414141;
+}
+body .pi-info-circle:hover {
+  color: #6c8c9e;
+  text-shadow: 0px 0px 4px rgba(108, 140, 158, 0.46);
+}
+
+body .pi-info-circle:focus {
+  color: #6c8c9e;
+  text-shadow: 0px 0px 4px rgba(108, 140, 158, 0.46);
+}
+
+/*************************/
+/*Slider*/
+
+body.p-slider .p-slider-handle:focus {
+  background-color: #d8ab6b00;
+  outline: 0 none;
+}
+
+/**************************/
+/*paginator*/
+
+body .p-paginator-right-content {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+/*************************/
+/* Filter container  */
+.filterContainer {
+  padding: 1rem;
+}
+
+/*DatePickers*/
+
+#filterStartDateDp .p-calendar .p-datepicker {
+  width: 35rem;
+}
+
+#filterStartDateDp .p-inputtext {
+  text-align: center;
+}
+
+#filterStartTimeDp .p-calendar .p-datepicker {
+  width: 2rem;
+}
+
+#filterStartTimeDp .p-inputtext {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+#filterEndDateDp .p-calendar .p-datepicker {
+  width: 20rem;
+}
+
+#filterEndDateDp .p-inputtext {
+  text-align: center;
+}
+
+#filterEndTimeDp .p-inputtext {
+  text-align: center;
+}
+
+#filterEndTimeDp .p-calendar .p-datepicker {
+  width: 2rem;
+}
+
+/***********************************/
+/*Column Filter*/
+
+.p-column-filter-clear-button .p-column-filter-menu-button {
+  color: #414141;
+}
+
+.p-column-filter-clear-button,
+.p-column-filter-menu-button:hover {
+  color: #6c8c9e;
+  text-shadow: 0px 0px 4px rgba(108, 140, 158, 0.46);
+}
+
+.p-column-filter-clear-button,
+.p-column-filter-menu-button:focus {
+  color: #6c8c9e;
+  text-shadow: 0px 0px 4px rgba(108, 140, 158, 0.46);
+  box-shadow: 0 0 0 0.1rem rgba(108, 140, 158, 0.46);
+  box-shadow: none;
+}
+
+.p-column-filter-clear-button,
+.p-column-filter-menu-button:active {
+  color: #6c8c9e;
+  text-shadow: 0px 0px 4px rgba(108, 140, 158, 0.46);
+}
+
+.p-column-filter-menu-button.p-column-filter-menu-button-open,
+.p-column-filter-menu-button.p-column-filter-menu-button-open:hover {
+  color: #6c8c9e;
+  text-shadow: 0px 0px 4px rgba(108, 140, 158, 0.46);
+}
+
+/**************************************************/
+/*Show Column Filter Button*/
+
+.showColumnFilter {
+  vertical-align: baseline;
+  /* font-size: 2em; */
+  padding: 0rem;
+  /* width: 1.3rem; */
+  /* height: 1.3rem; */
+  font-weight: bolder;
+}
+
+#showColumnFilterButton {
+  width: 1.3rem;
+  background-color: #0288d1;
+  border: #0288d1;
+  color: white;
+  margin-bottom: 0.4rem;
+  height: 1.5rem;
+}
+
+#showColumnFilterButton:hover {
+  background-color: #02bc05;
+  border: #027abc;
+  color: white;
+}
+
+#showColumnFilterButton:active {
+  background-color: #026da7;
+  border: #026da7;
+  color: white;
+}
+
+#showColumnFilterButton:focus {
+  box-shadow: 0 0 0 0.2rem #89d4fe;
+}
+
+/***************************************/
+/* Botón para guardar el filtro */
+#btnSaveFilter {
+  float: right;
+  position: relative;
+  top: 0.3rem;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  font-family: Vagrant;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.filterTablerow {
+  display: none;
+}
+/* *********************************** */
+.p-button-secondary:hover {
+  background-color: yellowgreen;
+}
+/* ------------------------------------------------------------------------------------ */
+/* Este es para que el component.html, los estilos en linea esten más ordenados*/
+/* La sección principal */
+.SectionMain {
+  /* "p-grid p-flex-column" style="width: 10%; "  */
+  width: auto;
+  /* margin: auto; */
+}
+/* Para el panel */
+::ng-deep .Panel {
+  /* [style]="{'width':'93%', 'font-family':'Arial', 'font-size':'0.9rem', 'text-transform':'uppercase','margin':'auto', 'margin-top':'0.5rem'}" */
+  width: 13%;
+}
+/* Scroll para tabla */
+/* .scroll-container {
+  display: block;
+  width: 450px;
+  height: 200px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+} */
+/* Los media querys para el la adapción al celular */
+@media screen and (max-width: 460px) {
+  ::ng-deep .Panel {
+    background-color: red;
+  }
+  .SectionMain div:nth-child(2) {
+    width: 100%;
+  }
+}

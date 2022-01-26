@@ -1,0 +1,63 @@
+<p-toast position="top-right" key="operationStatusInfo"></p-toast>
+
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+
+
+<div class="p-grid p-flex-column" style="width: 100%;  ">
+    <div class="p-col" style="width: 100%;  padding: 0;">
+        <p-panel
+            [style]="{'display':'block', 'width':'97.5%', 'font-family':'Arial','margin':'auto', 'margin-top':'0.5rem'}"
+            [header]="headerTitleLabel" [toggleable]="true" [collapsed]="false">
+        </p-panel>
+    </div>
+
+    <div class="p-col fadeIn" style="width: 80%; margin: auto; padding: 0;">
+
+        <p-splitter [style]="{'height': '100%'}" [panelSizes]="[65,35]" layout="horizontal">
+            <ng-template pTemplate>
+                <p-tree selectionMode="single" (onNodeExpand)="HandleExpandNode($event)"
+                    (onNodeSelect)="HandleExpandNode($event)" [(selection)]="selectedNode" [value]="treeNodeDataValues">
+                    <ng-template pTemplate="header">
+                        <p-toolbar>
+                            <div class="p-toolbar-group-left">
+                                <p-card>
+                                    <span class="font-family" style="font-weight: bold;">SERVIDOR AF: </span>
+                                    <span class="custom-label-green-no-animation">{{ afServerName }}</span>
+                                </p-card>
+                                <p-card [style]="{'margin-left':'1rem'}">
+                                    <span class="font-family" style="font-weight: bold;">BASE DE DATOS: </span>
+                                    <span class="custom-label-green-no-animation">{{ dataBaseName }}</span>
+                                </p-card>
+                            </div>
+
+                            <div class="p-toolbar-group-right">
+                                <!--
+                                            <p-button icon="pi pi-search"></p-button>
+                                        <p-button icon="pi pi-calendar" styleClass="p-button-success"></p-button>
+                                        <p-button icon="pi pi-times" styleClass="p-button-danger"></p-button>
+                                        -->
+
+                            </div>
+                        </p-toolbar>
+
+                    </ng-template>
+                    <ng-template pTemplate="empty">
+                        <span class="custom-label-yellow"> No se
+                            cargaron datos</span>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <div style="margin-top: 1; width:100%; height: 1rem; background-color: #8da7b7;"></div>
+                    </ng-template>
+                </p-tree>
+
+            </ng-template>
+            <ng-template pTemplate>
+                Panel 2
+            </ng-template>
+        </p-splitter>
+
+
+    </div>
+
+
+</div>

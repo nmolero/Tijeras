@@ -1,0 +1,87 @@
+<p-dialog keepInViewport="false" modal="true" position="top" #dialog blockScroll="true" [header]="header"
+    (onHide)="HandleDialogHide($event)" [(visible)]="visible" [style]="{width: '60vw'}">
+    <p-card [style]="{'width':'100%','margin':'auto','padding-left':'0','padding-right':'0'}" class="card">
+        <div class="formContainer" *ngIf="data.formData!==null">
+            <div class="element" *ngFor="let item of data.formData let i = index">
+
+                <label class="elementLabel">{{item.label}}:</label>
+
+
+                <span *ngIf="item.type === 'INPUT-TEXT'">
+                    <input [style]="{'color' : '#414141', 'width':'13rem','position':'relative', 'height': '2rem'}"
+                        pInputText (input)="HandleValidateMachineForm()" [disabled]="item.disabled"
+                        [type]="item.inputType" [(ngModel)]="item.value" [placeholder]="item.label">
+                </span>
+
+                <!--
+                      <span *ngIf="item.isEditable" style=" position: relative; font-weight: bold; ">hola</span>
+                        -->
+
+
+                <p-dropdown *ngIf="item.type === 'DROPDOWN'" appendTo="body" [filter]="true" [autofocusFilter]="true"
+                    [style]="{'color' : '#414141' ,'width':'13rem','position':'relative'}" [options]="item.options"
+                    [(ngModel)]="item.value" optionLabel="label" (onChange)="HandleValidateMachineForm()">
+                </p-dropdown>
+
+                <!-- <p-checkbox [class.checkBox]="!item.checkBox" [disabled]="!item.checkBox" inputId="checkBox_{{i}}"
+                            (onChange)="checked(i)">
+                        </p-checkbox>-->
+
+                <p-cascadeSelect *ngIf="item.type === inputTypes.CASCADE" [(ngModel)]="item.value" dataKey="ref_"
+                    appendTo="body" [disabled]="item.disabled" [options]="item.treeOptions" optionLabel="text"
+                    optionGroupLabel="text" [optionGroupChildren]="['nodes','nodes','nodes','nodes','nodes',]"
+                    (onChange)="HandleValidateMachineForm()" [placeholder]="item.placeholder"
+                    [style]="{'minWidth': '2rem', 'width':'13rem'}" [placeholder]="item.placeholder">
+                </p-cascadeSelect>
+
+            </div>
+        </div>
+
+    </p-card>
+
+    <div *ngIf="!data.noWeekDays" class="buttonContainer">
+        <!-- <span class="elementLabel">Añadir configuración: </span> -->
+        <button class="p-button-success" type="button" [disabled]="false" pButton icon="pi pi-plus" label=""
+            (click)="HandleAddConfigWeek()" pTooltip="Añadir configuración" tooltipPosition="right">
+        </button>
+    </div>
+
+    <div *ngIf="!data.noWeekDays">
+        <div *ngFor="let week of daysDataConfig" class="dayTimeContainer">
+            <div class="toggleButtonContainer">
+                <div class="toggleButtonElement" *ngFor="let element of week.weekDays">
+                    <p-toggleButton (onChange)="HandleValidateForm()" [onLabel]="element.label"
+                        [offLabel]="element.label" onIcon="" offIcon="" [(ngModel)]="element.value">
+                    </p-toggleButton>
+                </div>
+
+            </div>
+            <div class="calendarContainer">
+                <label class="calendarLabelText">Inicio: </label>
+                <p-calendar [style]="{'width':'6rem'}" [inline]="false" [disabled]="false" [timeOnly]="true"
+                    appendTo="body" (onSelect)="HandleValidateCalendars()" (onInput)="HandleValidateCalendars()"
+                    dateFormat="dd/mm/yy " hourFormat="24" [(ngModel)]="week.startTime" showTime="true"
+                    [showIcon]="false">
+                </p-calendar>
+                <label class="calendarLabelText">Fin: </label>
+                <p-calendar [style]="{'width':'6rem'}" [inline]="false" [timeOnly]="true" [disabled]="false"
+                    appendTo="body" (onSelect)="HandleValidateCalendars()" (onInput)="HandleValidateCalendars()"
+                    dateFormat="dd/mm/yy " hourFormat="24" [(ngModel)]="week.endTime" showTime="true"
+                    [showIcon]="false">
+                </p-calendar>
+            </div>
+        </div>
+
+
+    </div>
+
+    <p-footer>
+        <button type="button" [(disabled)]="isConfirmButton" pButton icon="pi pi-check" (click)="visible=false"
+            (click)="HandleConfirmButton()" label="Confirmar">
+        </button>
+        <button type="button" pButton icon="pi pi-times" (click)="visible=false" label="Cancelar"
+            class="p-button-secondary">
+        </button>
+    </p-footer>
+
+</p-dialog>

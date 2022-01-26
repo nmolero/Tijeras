@@ -1,0 +1,26 @@
+<p-toast position="top-right" key="operationStatusInfo"></p-toast>
+
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+
+<p-panel [style]="{'width':'93%', 'font-family':'Arial','margin':'auto', 'margin-top':'0.5rem','margin-bottom':'0rem'}"
+    [header]="header" [toggleable]="true" [collapsed]="collapsed">
+    <div class="panelContentContainer">
+        <div class="panelButtonContainer">
+            <button id="addButtonIcon" pButton pRipple label="Nuevo evento" icon="pi pi-plus"
+                class="p-button-success p-mr-2" (click)="HandleAddButton(null, null)"></button>
+        </div>
+    </div>
+</p-panel>
+
+
+<p-card [style]="{'width':'87.5%','margin':'auto'}" class="pageContainer">
+
+    <!-- <p-fullCalendar #calendar [events]="events" [options]="options"></p-fullCalendar> -->
+    <full-calendar #fullCalendar style="height: 100%; width: 100%;" [options]="calendarOptions"></full-calendar>
+
+</p-card>
+
+
+<app-crud-add-edit-dialog (onHide)="addDialogVisible=false" [data]="addDialogData" [header]="addDialogheader"
+    [(visible)]="addDialogVisible">
+</app-crud-add-edit-dialog>

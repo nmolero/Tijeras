@@ -1,0 +1,69 @@
+<p-toast position="top-right" key="operationStatusInfo"></p-toast>
+
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+
+
+<div class="p-grid p-flex-column" style="width: 100%;">
+
+    <div class="p-col" style="width: 100%;">
+
+        <p-panel
+            [style]="{'width':'93%', 'font-family':'Arial','margin':'auto', 'margin-top':'0.5rem','margin-bottom':'0rem'}"
+            header="Esquemas de trabajo" [toggleable]="true" [collapsed]="false">
+            <div class="panelContainer">
+
+                <button id="machineAddButtonIcon" pButton pRipple label="Nueva máquina" icon="pi pi-plus"
+                    pTooltip="Configurar nueva máquina" tooltipPosition="bottom" pRipple class="p-button-success p-mr-2"
+                    (click)="HandleMachineAddButton()"></button>
+
+                <button id="machineListButton" pButton pRipple label="" icon="pi pi-list" pRipple style="color: white;"
+                    pTooltip="Listado de máquinas" tooltipPosition="bottom" class="p-button-warning p-ml-2"
+                    (click)="HandleMachineList()"></button>
+            </div>
+
+        </p-panel>
+
+    </div>
+
+    <div class="p-col" style="width: 100%; margin-top: 1rem;">
+        <div style="display: flex; flex-direction: row; justify-content: center;">
+            <app-crud-table style="width: 93%;" (isLoadingResults)="isLoadingResults=$event" captionTitle="Esquemas"
+                [table]="wSchemeTable" [selection]="wschemeSelectedRows" (onClick)="HandleDialogButton($event)"
+                [dataTableValues]="workSchemesDataTableValues" summaryElementsLabel="esquemas"
+                [listOfColumns]="workSchemeListOfColumns" [exportFileName]="wSchemeExportFileName">
+            </app-crud-table>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<app-wscheme-add-dialog [(visible)]="addDialogVisible" (onHide)="addDialogVisible=false" [data]="addDialogData"
+    [header]="addDialogheader">
+</app-wscheme-add-dialog>
+
+
+<app-crud-delete-dialog singleDeleteLabel="Desea eliminar el siguiente registro"
+    multipleDeleteLabel="Desea eliminar los siguiente/s registros/s" [header]="deleteDialogheader">
+
+</app-crud-delete-dialog>
+
+<p-dialog #machineDialog keepInViewport="false" modal="true" #dialog blockScroll="true" [header]="machineListheader"
+    position="top" [(visible)]="machineListDialogvisible" [style]="{width: '90vw'}">
+    <div class="p-col" style="width: 100%; margin-top: 0rem;">
+        <div style="display: flex; flex-direction: row; justify-content: center; padding-bottom: 6rem;">
+            <app-crud-table style="width: 93%;" (isLoadingResults)="isLoadingResults=$event"
+                paginatorDropdownAppendTo="body" captionTitle="Listado de máquinas" [table]="machineListTable"
+                [selection]="machineSelectedRows" [dataTableValues]="machineListDataTableValues"
+                summaryElementsLabel="Máquinas" [listOfColumns]="machineListOfColumns"
+                [exportFileName]="machineExportFileName">
+            </app-crud-table>
+
+        </div>
+
+
+    </div>
+</p-dialog>

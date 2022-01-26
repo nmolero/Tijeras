@@ -1,0 +1,416 @@
+<p-toast position="top-right" key="operationStatusInfo"></p-toast>
+
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+
+<div class="p-grid p-flex-column" style="width: 100%;">
+
+
+    <div class="p-col" style="width: 100%;">
+        <p-panel
+            [style]="{'width':'93%', 'font-family':'Arial','margin':'auto', 'margin-top':'0.5rem','margin-bottom':'0rem'}"
+            [header]="headerTitleLabel" [toggleable]="true" [collapsed]="true">
+
+            <div class="ui-fluid">
+
+                <!--
+                    <button id="addButtonIcon" pButton pRipple label="Nuevo" icon="pi pi-plus"
+                    class="p-button-success p-mr-2" (click)="HandleAddButton()"></button>
+                    <button id="deleteButtonIcon" pButton pRipple label="" icon="pi pi-trash" class="p-button-danger"
+                        [disabled]="isDeleteItemsDisabled" (click)="HandleDeleteSelectedItems()"></button>
+
+
+                -->
+                <button id="excelButtonCrud" (click)="dataTable.exportCSV()" pTooltip="CSV" tooltipPosition="bottom"
+                    pButton pRipple label="" icon="pi pi-file-excel"></button>
+            </div>
+        </p-panel>
+
+    </div>
+
+
+    <div class="p-col" style="width: 93%;margin:auto;">
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 drag-column">
+                <p-dataView #sytemModulesDataView id="sytemModulesDataView" [value]="dataViewFilteredModulesValues"
+                    filterBy="name" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20,50,100]"
+                    [emptyMessage]="emptyMessage" [style]="{'padding-top':'0rem', 'padding-left':'0.5rem'}"
+                    paginatorPosition="bottom">
+                    <ng-template pTemplate="header">
+
+                        <button id="addButtonIcon" pButton pRipple label="Nuevo" icon="pi pi-plus"
+                            [(disabled)]="isAddModuleButtonDisabled" pTooltip="Añadir Nuevo Módulo"
+                            tooltipPosition="bottom" class="p-button-success p-mr-2"
+                            (click)="HandleAddButton('modules')"></button>
+
+                        <div style="float: right; width: 13rem;" class="p-inputgroup">
+                            <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+                            <input type="search" pInputText placeholder="Filtrar por nombre"
+                                (input)="sytemModulesDataView.filter($event.target.value, 'contains')">
+                        </div>
+
+
+
+                    </ng-template>
+                    <ng-template let-item pTemplate="listItem" style="max-height: 10rem;">
+
+
+                        <div class="module-item" pDraggable="dd" (onDragStart)="dragStart($event,item)"
+                            dragEffect="move" (onDragEnd)="dragEnd()">
+
+
+                            <div class="product-list-detail">
+                                <h4 class="p-mb-2">{{item.description}}</h4>
+                                <i class="pi pi-tag product-category-icon"></i>
+                                <span class="product-category">{{item.name}}</span>
+
+                            </div>
+                            <div class="product-list-action">
+                                <h4 class="p-mb-2"> End-Point</h4>
+
+                                <span>
+                                    <i class="pi pi-link product-category-icon" style="display: inline;"></i>
+                                    <span class="product-category" style="display: inline;">{{item.endPoint}}</span>
+                                </span>
+                            </div>
+                            <div class="product-list-action">
+                                <h5 class="p-mb-2">Habilitado</h5>
+
+                                <span [class.custom-label-red]="!item.enabled"
+                                    [class.custom-label-green]="item.enabled">{{item.enabled?'ON':'OFF'}}</span>
+                            </div>
+                        </div>
+
+
+                    </ng-template>
+                    <ng-template pTemplate="empty">
+                        <div style="text-align: center; color: #7ead95; font-weight: bold;">
+                            {{emptyMessage}}
+                        </div>
+                    </ng-template>
+
+
+                </p-dataView>
+
+
+                <!--
+
+                    <div *ngFor="let item of dataTableModulesValues">
+                    <div class="module-item" pDraggable="dd" (onDragStart)="dragStart($event,item)" dragEffect="move"
+                        (onDragEnd)="dragEnd()">
+
+
+                        <div class="product-list-detail">
+                            <h4 class="p-mb-2">{{item.description}}</h4>
+                            <i class="pi pi-tag product-category-icon"></i>
+                            <span class="product-category">{{item.name}}</span>
+                        </div>
+                        <div class="product-list-action">
+                            <h5 class="p-mb-2">Habilitado</h5>
+                            <span [class.custom-label-red]="editEnabled"
+                                [class.custom-label-green]="!editEnabled">{{item.enabled?'ON':'OFF'}}</span>
+                        </div>
+                    </div>
+                </div>
+                -->
+
+            </div>
+
+            <div #dropableArea id="dropableArea" [class.dropableArea]="isDragOver" class="p-col-12 p-md-6 drop-column"
+                pDroppable="dd" dropEffect="link" (onDrop)="drop()">
+                <p-messages></p-messages>
+                <p-tabView *ngIf="isTabViewVisible" #tabView id="tabView" [activeIndex]="activeIndex"
+                    (onChange)='activeIndex = $event.index' (onChange)='HandleChangeTab(activeIndex)'>
+                    <p-tabPanel id="tabPanel" [header]="item.header" *ngFor="let item of items; let i = index"
+                        [selected]="i == 0">
+                        <p-table #dataTable id="dataTable" [value]="dataTableValues" [columns]="listOfColumns"
+                            [rowHover]="true" selectionMode="single" [(selection)]="selectedRows" [rows]="10"
+                            [responsive]="true" (onRowSelect)="HandleRowSelect($event)"
+                            (onRowUnselect)="HandleRowUnSelect($event)" [dataKey]="id" [paginator]="true"
+                            [rowsPerPageOptions]="[10,20,30,50,100]">
+                            <ng-template pTemplate="caption">
+                                <span style="font-size: 1.5rem;">Permisos</span>
+                                <button style="float:right; height:2rem; width:2rem; top:0.5rem;"
+                                    id="profileAddButtonIcon" pButton pRipple label="" icon="pi pi-user-plus"
+                                    pTooltip="Añadir Nuevo Perfil de Usuario" tooltipPosition="bottom"
+                                    class="p-button-success p-mr-2" (click)="HandleAddButton('profiles')">
+                                </button>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns style="padding-right: 0;">
+                                <tr style="font-family:Arial, Helvetica, sans-serif; text-align:center; ">
+                                    <th *ngFor="let column of columns" [pSortableColumn]="column.field"
+                                        [ngStyle]="{'width':column.width}"
+                                        style="text-align:center; padding-right: 0rem; padding-left: 0;"
+                                        [pSortableColumnDisabled]="column.field === 'checkBoxSelect' || column.field === 'actionButtons' ">
+
+                                        <span>
+                                            {{column.header}}
+                                        </span>
+                                        <p-sortIcon
+                                            *ngIf="column.field !== 'checkBoxSelect' && column.field !== 'actionButtons'"
+                                            [field]="column.field">
+                                        </p-sortIcon>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th style="font-family:Arial, Helvetica, sans-serif; text-align:center; "
+                                        *ngFor="let column of columns">
+
+                                        <input [style]="{'width':'90%','text-align':'center'}" pInputText type="text"
+                                            *ngIf="column.field!=='checkBoxSelect'&&column.field!=='actionButtons'&&column.field!=='enabledString'"
+                                            [(ngModel)]="column.filterValue" [placeholder]="column.header"
+                                            (input)="HandleIsFilterEmpty($event)"
+                                            (input)="dataTable.filter($event.target.value, column.field, 'contains')"
+                                            [value]="dataTable.filters[column.field]?.value">
+
+                                        <p-columnFilter *ngIf="column.field==='enabledString'" [field]="column.field"
+                                            matchMode="contains" [showMenu]="false">
+                                            <ng-template pTemplate="filter" let-value="selectedEnabledFilter"
+                                                let-filter="filterCallback">
+                                                <p-dropdown [(ngModel)]="selectedEnabledFilter"
+                                                    [options]="enabledOptions" (onChange)="filter($event.value)"
+                                                    placeholder="Todos" [showClear]="true">
+                                                    <ng-template let-option pTemplate="item">
+                                                        <span [class.custom-label-red]="option.label==='OFF'"
+                                                            [class.custom-label-green]="option.label==='ON'">{{option.label}}</span>
+                                                    </ng-template>
+                                                </p-dropdown>
+                                            </ng-template>
+                                        </p-columnFilter>
+
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns>
+                                <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+                                    <td #tableCell style="text-align: center;"
+                                        *ngFor="let col of listOfColumns;index as i;" id="{{col.field + rowIndex}}">
+
+                                        <span style="text-align: center; font-weight: bold;" *ngIf="col.field==='id'">
+                                            {{rowData[col.field]}}
+                                        </span>
+
+                                        <span style="text-align: center;"
+                                            *ngIf="col.field!=='id'&&col.field!=='actionButtons'&&col.field!=='enabledString'">
+                                            {{rowData[col.field]}}
+                                        </span>
+
+                                        <span *ngIf="col.field==='enabledString'"
+                                            [class.custom-label-red]="rowData[col.field]==='OFF'"
+                                            [class.custom-label-green]="rowData[col.field]==='ON'">
+                                            {{rowData[col.field]}}
+                                        </span>
+                                        <div style="width: 100%;">
+                                            <!--
+                                                 <button style="margin-left: 0%; margin-right: 3rem;"
+                                                *ngIf="col.field==='actionButtons'" pButton pRipple icon="pi pi-pencil"
+                                                class="p-button-rounded p-button-success p-mr-2"
+                                                (click)="HandleEditItem(rowData)"></button>
+                                            -->
+
+
+                                            <button #deleteRowButton *ngIf="col.field==='actionButtons'" pButton pRipple
+                                                icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                                (click)="HandleDeleteItem(rowData)"></button>
+
+                                        </div>
+
+
+                                    </td>
+
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td style="text-align:center; height: 2rem; font-weight: bold; color: red;"
+                                        [attr.colspan]="columns.length">
+                                        Sin permisos asignados!
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                    </p-tabPanel>
+
+                </p-tabView>
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+</div>
+
+
+<p-dialog keepInViewport="false" modal="true" position="top" #AddDialog blockScroll="true" [header]="addDialogHeader"
+    [draggable]="true" (onHide)="HandleAddDialogHide($event)" [(visible)]="displayAddDialog" [style]="{width: '30vw'}">
+
+    <p *ngIf="dialogType==='modules'"
+        style=" align-items: center; display: flex; justify-content:space-evenly; font-family: Arial, Helvetica, sans-serif;">
+
+        <span style="width : 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="nameInput">Nombre: </label>
+        </span>
+
+        <span>
+            <input [style]="{'color' : '#414141', 'width':'13rem','position':'relative'}" [(ngModel)]="name"
+                placeholder="Nombre del módulo." (input)="HandleElementValidation('modules')"
+                pTooltip="Nombre del módulo." tooltipPosition="bottom" id="nameInput" #nameInput type="text" size="30"
+                pInputText />
+
+        </span>
+
+
+
+    </p>
+
+    <p *ngIf="dialogType==='modules'"
+        style="align-items: center;  display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem;">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="descriptionInput">Descripción: </label>
+        </span>
+
+
+        <input [style]="{'color' : '#414141', 'width':'13rem','position':'relative'}" [(ngModel)]="description"
+            pTooltip="Ingrese decripción del módulo" tooltipPosition="bottom" placeholder="Descripción del módulo"
+            (input)="HandleElementValidation('modules')" id="descriptionInput" #descriptionInput type="text" size="30"
+            pInputText />
+
+    </p>
+    <p *ngIf="dialogType==='modules'"
+        style="align-items: center; display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem;">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="enabledSwitch">Habilitado: </label>
+        </span>
+
+        <span style="width: 13rem;">
+
+            <p-inputSwitch [(ngModel)]="enabled">
+            </p-inputSwitch>
+
+            <span style="margin-left:1rem; position: relative; top:-0.6rem;" [class.custom-label-red]="!enabled"
+                [class.custom-label-green]="enabled">
+                {{enabled?'ON':'OFF'}}
+            </span>
+        </span>
+
+
+    </p>
+
+
+    <p *ngIf="dialogType==='modules'"
+        style="align-items: center;  display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem;">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="endPointInput">EndPoint: </label>
+        </span>
+
+
+        <input [style]="{'color' : '#414141', 'width':'13rem','position':'relative'}" [(ngModel)]="endPoint"
+            pTooltip="EndPoint del módulo" tooltipPosition="bottom" placeholder="EndPoint"
+            (input)="HandleElementValidation('modules')" id="endPointInput" #endPointInput type="text" size="30"
+            pInputText />
+
+    </p>
+
+
+    <p *ngIf="dialogType==='profiles'"
+        style=" align-items: center; display: flex; justify-content:space-evenly; font-family: Arial, Helvetica, sans-serif;">
+
+        <span style="width : 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="profileNameInput">Nombre: </label>
+        </span>
+
+        <span>
+            <input [style]="{'color' : '#414141', 'width':'13rem','position':'relative'}" [(ngModel)]="profileName"
+                placeholder="Nombre" (input)="HandleElementValidation('profiles')" pTooltip="Nombre del Perfil."
+                tooltipPosition="bottom" id="profileNameInput" #profileNameInput type="text" size="30" pInputText />
+
+        </span>
+
+
+
+    </p>
+
+    <p *ngIf="dialogType==='profiles'"
+        style="align-items: center;  display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem;">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="profileDescriptionInput">Descripción: </label>
+        </span>
+
+
+        <input [style]="{'color' : '#414141', 'width':'13rem','position':'relative'}" [(ngModel)]="profileDescription"
+            pTooltip="Descripción del módulo" tooltipPosition="bottom" placeholder="Descripción"
+            (input)="HandleElementValidation('profiles')" id="profileDescriptionInput" #profileDescriptionInput
+            type="text" size="30" pInputText />
+
+    </p>
+
+    <p *ngIf="dialogType==='profiles'"
+        style="align-items: center; margin-bottom: 5rem; display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem; padding-bottom: 1rem;">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="profilesDD">Copiar Perfil: </label>
+        </span>
+
+
+        <p-dropdown [style]="{'color' : '#414141', 'width':'13rem',
+                              'position':'relative'}" id="profilesDD" #profilesDD [options]="addProfileOptions"
+            appendTo="body" [(ngModel)]="selectedAddProfile" optionLabel="label">
+        </p-dropdown>
+
+
+
+    </p>
+
+    <p-footer>
+        <button type="button" [(disabled)]="isConfirmAddButton" pButton icon="pi pi-check"
+            (click)="displayAddDialog=false" (click)="HandleConfirmAddButton(dialogType)" label="Confirmar">
+        </button>
+        <button type="button" pButton icon="pi pi-times" (click)="displayAddDialog=false" label="Cancelar"
+            class="p-button-secondary">
+        </button>
+    </p-footer>
+
+</p-dialog>
+
+
+<p-dialog modal="true" blockScroll="true" [header]="deleteDialogHeader" [(visible)]="displayDeleteDialog"
+    [style]="{width: '35vw'}">
+
+    <div *ngIf="!isDeleteSelectedItemsPressed">
+        <span *ngIf="selectedRowItem">Desea eliminar el permiso :
+            <span style="font-weight: bold; color: #ff3700;"> {{selectedRowItem.description}} </span>
+            ?</span>
+
+    </div>
+
+    <div *ngIf="isDeleteSelectedItemsPressed">
+        <span *ngIf="selectedRows" style="margin-top: 0.6rem;">Desea eliminar los siguiente/s permisos/s ?
+            <div *ngFor="let row of selectedRows;index as i;"
+                style="margin-top: 0.5rem; text-align: center; font-weight: bold; color: #ff3700; ">
+                {{row.description}}
+            </div>
+        </span>
+
+    </div>
+
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="displayDeleteDialog=false"
+            (click)="HandleDeleteConfirmButton()" (click)="isDeleteSelectedItemsPressed=false"
+            label="Confirmar"></button>
+        <button type="button" pButton icon="pi pi-times" (click)="displayDeleteDialog=false" label="Cancelar"
+            (click)="isDeleteSelectedItemsPressed=false" class="p-button-secondary"></button>
+    </p-footer>
+
+</p-dialog>

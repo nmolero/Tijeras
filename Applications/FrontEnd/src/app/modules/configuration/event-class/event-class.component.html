@@ -1,0 +1,40 @@
+<p-toast position="top-right" key="operationStatusInfo"></p-toast>
+
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+
+<!-- Este componente llamado event-class. Solamente maneja las causas y subcausas  -->
+<div class="w3-container">
+    <!-- La cebecera colapsada para mostrar  -->
+    <div>
+        <app-crud-panel [header]="headerTitleLabel" [collapsed]="collapsed"></app-crud-panel>
+    </div>
+
+    <!-- La tabla -->
+    <div class="contenedor">
+        <div id="responsiveTable">
+            <app-crud-table  (isLoadingResults)="isLoadingResults=$event" captionTitle="Causas"
+                [table]="causeTable" [selection]="causeSelectedRows" (onClick)="HandleDialogButton($event)"
+                [dataTableValues]="causeDataTableValues" summaryElementsLabel="causas"
+                [listOfColumns]="causeListOfColumns" [exportFileName]="causeExportFileName" style="text-align: center;">
+            </app-crud-table>
+
+            <app-crud-table  (isLoadingResults)="isLoadingResults=$event" captionTitle="Sub Causas"
+                [table]="subCauseTable" [selection]="subCauseSelectedRows" (onClick)="HandleDialogButton($event)"
+                [dataTableValues]="subCauseDataTableValues" summaryElementsLabel="sub-causas"
+                [listOfColumns]="subcCauseListOfColumns" [exportFileName]="subCauseExportFileName">
+            </app-crud-table>
+        </div>
+    </div>
+    <!-- Importante: -->
+    <!-- Para saber donde está hecha tabla se encuentra en la carpeta de crud-components ya que la carpeta event-class está relacionada -->
+</div>
+
+<!-- Esta es para la edición y agrega -->
+<app-crud-add-edit-dialog (onHide)="addDialogVisible=false" [data]="addDialogData" [header]="addDialogheader"
+    [(visible)]="addDialogVisible">
+</app-crud-add-edit-dialog>
+
+<!-- Este es un mensaje de alerta para el Delete -->
+<app-crud-delete-dialog singleDeleteLabel="Desea eliminar el siguiente registro"
+    multipleDeleteLabel="Desea eliminar los siguiente/s registros/s" [header]="deleteDialogheader">
+</app-crud-delete-dialog>

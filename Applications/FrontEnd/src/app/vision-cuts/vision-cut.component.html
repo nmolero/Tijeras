@@ -1,0 +1,55 @@
+<div class="p-col" style="width: 94%; margin: auto; margin-bottom: -10px;">
+    <p-panel [header]="headerTitleLabel" [toggleable]="true" [collapsed]="true">
+    </p-panel>
+    <app-range-grafic></app-range-grafic>
+    <p-splitter [style]="{'height':'400px'}"  [panelSizes]="[80,20]" stateKey="mykey" stateStorage="local">
+        <ng-template pTemplate>
+            <p-splitter layout="vertical" [panelSizes]="[50,50]">
+                <ng-template pTemplate>
+                        <div class="d-flex">
+                            <!-- Mostrar el fotograma -->
+                            <div *ngIf="Despunte == 'Despunte'">
+                                <app-photogram></app-photogram>
+                            </div>
+                            <!-- Mostrar la distribución  -->
+                            <div *ngIf="Despunte == 'Despunte'">
+                                <app-distribution></app-distribution>
+                            </div>
+                            <div>
+                                <app-resuts2></app-resuts2>
+                            </div>
+                        </div>
+                </ng-template>
+                <ng-template pTemplate>
+                    <!-- Mostrar el fotograma -->
+                    <div *ngIf="Despunte == 'Despunte'">
+                        <app-photogram2></app-photogram2>
+                    </div>
+                    <!-- Mostrar la distribución  -->
+                    <div *ngIf="Despunte == 'Despunte'">
+                        <app-distribution2></app-distribution2>
+                    </div>
+                    <div>
+                        <app-resuts></app-resuts>
+                    </div>
+                </ng-template>
+            </p-splitter>
+        </ng-template>
+        <ng-template pTemplate>
+            <p-splitter layout="vertical" [panelSizes]="[50,50]">
+                <ng-template pTemplate>
+                    <p-panel class="p-col" header="Registro de datos">
+                        <!-- Acá va el componente que muestra el registro en una tabla  -->
+                        <app-register-table></app-register-table>
+                    </p-panel>
+                </ng-template>
+                <ng-template pTemplate>
+                    <p-panel class="p-col" header="Peso">
+                        <!-- Acá vá el contenido que muestra los impacto de rendimientos  -->
+                        <app-impacts-metalics></app-impacts-metalics>
+                    </p-panel>
+                </ng-template>
+            </p-splitter>
+        </ng-template>
+    </p-splitter>
+</div>

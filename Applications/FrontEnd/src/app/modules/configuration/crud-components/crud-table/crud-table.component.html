@@ -1,0 +1,126 @@
+
+<!-- Las tablas en general -->
+<p-table #dataTable id="dataTable" [value]="dataTableValues" [rows]="10" [paginator]="true" [columns]="listOfColumns"
+    [rowHover]="true" dataKey="id" selectionMode="" [rowsPerPageOptions]="[10,20,30,50,100]" [(selection)]="selection"
+    dataKey="id" [exportFilename]="exportFileName" (onRowSelect)="HandleRowSelect($event)"
+    (onRowUnselect)="HandleRowUnSelect($event)"
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+    [showCurrentPageReport]="true" >
+
+    <!-- En este caption están los tres botones o más bien dicho, la cabecera -->
+    <ng-template pTemplate="caption">
+        <div class="d-md-flex flex-sm-column flex-md-row bd-highlight align-items-center">
+            <!-- El título -->
+            <div style="flex-shrink:0; font-size: 1.5rem; padding-right: 1rem;">{{captionTitle}} - </div>
+            <!-- Los tres botonoes -->
+            <div class="w-100 mt-2 mb-2">
+                <!-- Botón para añadir -->
+                <button id="addButtonIcon" pButton pRipple label="Nuevo" icon="pi pi-plus"
+                    class="p-button-success p-mr-2" (click)="HandleAddButton(table)" pTooltip="Añadir elemento">
+                </button>
+                <!-- Botón para eliminar -->
+                <button id="deleteButtonIcon" pButton pRipple label="" icon="pi pi-trash" class="p-button-danger"
+                    [disabled]="isDeleteItemsDisabled" (click)="HandleDeleteSelectedItems()" pTooltip="Elminar elemento/s">
+                </button>
+                <!-- Botón para descargar un excel con todos los registro  -->
+                <button id="excelButtonCrud" (click)="dataTable.exportCSV()" pTooltip="CSV" tooltipPosition="bottom"
+                    pButton pRipple label="" icon="pi pi-file-excel">
+                </button>
+            </div>
+        </div>
+
+        <!-- <button style="float:right; height:2rem; width:2rem; top:0.5rem;" id="profileAddButtonIcon" pButton pRipple
+            label="" icon="pi pi-user-plus" pTooltip="Añadir Nuevo Perfil de Usuario" tooltipPosition="bottom"
+            class="p-button-success p-mr-2" (click)="HandleAddButton('profiles')">
+        </button> -->
+    </ng-template>
+
+    <!-- Esta es la fila cabecera con los títulos para cada columna  -->
+    <ng-template pTemplate="header" let-columns>
+        <tr [pSelectableRow]="rowData">
+            <th *ngFor="let column of columns" [pSortableColumn]="column.field" [ngStyle]="{'width':column.width}"
+                 [pSortableColumnDisabled]="column.field === 'checkBoxSelect' ||
+                                            column.field === 'actionButtons' ">
+
+                <p-tableHeaderCheckbox *ngIf="column.field === 'checkBoxSelect'"
+                (click)="HandleHeaderCheckBoxClick()"></p-tableHeaderCheckbox>
+
+                <!-- Titulo de cada columna  -->
+                <span *ngIf="column.field !== 'checkBoxSelect'">
+                    {{column.header}}
+                </span>
+
+                <!-- Icono que esta al lado  -->
+                <p-sortIcon *ngIf="column.field !== 'checkBoxSelect' &&
+                                   column.field !== 'actionButtons'"
+                    field]="column.field">
+                </p-sortIcon>
+            </th>
+        </tr>
+        <tr>
+            <!-- Esta fila muestra el filtrado -->
+            <th *ngFor="let column of columns">
+                <input [style]="{'text-align':'center', 'width':'100%'}" pInputText type="text"
+                    *ngIf="column.field!=='checkBoxSelect'&&column.field!=='actionButtons'"
+                    [(ngModel)]="column.filterValue" [placeholder]="column.header" (input)="HandleIsFilterEmpty($event)"
+                    (input)="dataTable.filter($event.target.value, column.field, 'contains')"
+                    [value]="dataTable.filters[column.field]?.value">
+            </th>
+        </tr>
+    </ng-template>
+
+    <!-- Es el cuerpo del tabla o las vista de todos los registros  -->
+    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
+        <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+            <td #tableCell id="tableCell" *ngFor="let col of columns;index as i;"
+                id="{{col.field + rowIndex}}">
+
+                <!-- Los checkbox que permiten la selección  -->
+                <p-tableCheckbox *ngIf="col.field==='checkBoxSelect'" (click)="$event.stopPropagation()"
+                    [value]="rowData">
+                </p-tableCheckbox>
+
+                <!-- Traigo el resultado -->
+                <span style="text-align: center;"
+                      *ngIf="col.field!=='checkBoxSelect' &&
+                        col.field!=='actionButtons' &&
+                        col.isDate===false">
+                    {{rowData[col.field]}}
+                </span>
+
+                <!-- Traigo el resultado  -->
+                <span *ngIf="col.isDate===true || col.isDate===true">
+                    {{ rowData[col.field] ? (rowData[col.field] | date: 'dd/MM/yy HH:mm:ss') : '-' }}
+                </span>
+
+                <!-- Estos son los botones para editar y eliminar  -->
+                <div class="d-md-flex d-sm-flex justify-content-center flex-sm-column flex-md-row">
+                    <button *ngIf="col.field==='actionButtons'" pButton
+                        pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                        (click)="HandleEditItem(rowData)"><!--style="margin-left: 0%; margin-right: 3rem;"-->
+                    </button>
+                    <button #deleteRowButton *ngIf="col.field==='actionButtons'" pButton pRipple icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning" (click)="HandleDeleteItem(rowData)">
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+
+    <!-- Este es para mostrar el total de eventos -->
+    <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+            En total hay {{dataTableValues ? dataTableValues.length : 0 }} {{summaryElementsLabel}}.
+        </div>
+    </ng-template>
+
+    <!-- Este por si en el filtro no se encuentra anda  -->
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td style="text-align:center; height: 2rem;" [attr.colspan]="columns.length">
+                Sin Datos
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<!-- ------------------------------------------------------ -->

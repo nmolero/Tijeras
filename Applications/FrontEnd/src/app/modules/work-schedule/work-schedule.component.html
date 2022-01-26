@@ -1,0 +1,40 @@
+<!-- Este componente es para el trabajo de la programación periódica, solamente redirecciona este componente no es que esta trabajando
+con la tabla en si ya que este trae los datos desde el servidor -->
+<p-toast position="top-right" key="operationStatusInfo"></p-toast>
+
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+
+
+<div class="p-grid p-flex-column" style="width: 100%;">
+
+    <div class="p-col" style="width: 100%;">
+
+        <app-crud-panel [header]="headerTitleLabel" [collapsed]="collapsed"></app-crud-panel>
+
+    </div>
+
+    <div class="p-col" style="width: 100%; margin-top: 1rem;">
+        <div style="display: flex; flex-direction: row; justify-content: center;">
+            <app-crud-table style="width: 93%;" (isLoadingResults)="isLoadingResults=$event"
+                captionTitle="Programación Períodica" [table]="wScheduleTable" [selection]="wscheduleSelectedRows"
+                (onClick)="HandleDialogButton($event)" [dataTableValues]="workScheduleDataTableValues"
+                summaryElementsLabel="registros" [listOfColumns]="workScheduleListOfColumns"
+                [exportFileName]="wScheduleExportFileName">
+            </app-crud-table>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<app-crud-add-edit-dialog [(visible)]="addDialogVisible" (onHide)="addDialogVisible=false" [data]="addDialogData"
+    [header]="addDialogheader">
+</app-crud-add-edit-dialog>
+
+
+<app-crud-delete-dialog singleDeleteLabel="Desea eliminar el siguiente registro"
+    multipleDeleteLabel="Desea eliminar los siguiente/s registros/s" [header]="deleteDialogheader">
+</app-crud-delete-dialog>

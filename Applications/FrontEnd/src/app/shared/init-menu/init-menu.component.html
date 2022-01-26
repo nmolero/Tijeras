@@ -1,0 +1,635 @@
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+<p-toast [baseZIndex]="toastZIndex" position="top-right" key="operationStatusInfo"></p-toast>
+
+<div>
+
+    <p-sidebar id="initMenuSideBar" #initMenuSideBar [(visible)]="menuSideBarVisible" position="left"
+        [fullScreen]="false" [style]="{'height':'87%', 'top':'12%','overflow':'hidden'}" (onHide)="HandleHideSideBar()">
+
+        <p style="font-weight: bold;
+                  font-family: Arial; font-size: 1rem;
+                  margin: auto; margin-bottom: 2rem;
+                  width: 60%; padding-top: 0%;">
+            Menú de Opciones
+        </p>
+
+        <p-scrollPanel [style]="{width: '100%', 'height': '95%','margin-top':'0.15rem'}">
+            <p-panelMenu [multiple]="false" [model]="panelMenuItems" (click)="HandleToggleSideNav($event)"
+                [style]="{'width':'95%' , 'max-height':'100%','margin':'auto','margin-bottom':'3rem'}">
+
+            </p-panelMenu>
+        </p-scrollPanel>
+
+        <!-- <div [class.NoConnection]="backEndVersion==='STA2 BE version -----'" style="width: 90%; font-weight: bold; margin-left: 10%;
+                    display: inline-block; position: absolute; bottom: 0; left:0; ">
+            {{frontEndVersion}}
+            <br>
+            <span>
+                {{backEndVersion}}
+            </span>
+
+
+        </div> -->
+
+    </p-sidebar>
+
+
+    <div class="p-grid" style="width: 100%; margin:auto; align-items: center;">
+
+        <div class="p-col-fixed" style=" width: 4%;  ">
+            <button mat-button color="accept" class="chipListMenu" (click)="menuSideBarVisible = true"
+                (click)="HandleSideBarButton()" pTooltip="Desplegar menú de opciones" tooltipPosition="bottom"
+                tooltipStyleClass="toolTipClass">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </div>
+
+        <div class="p-col-fixed" style=" width: 25%;  ">
+            <img style="display: inline; transform: scale(0.7,0.7);" src="assets/img/acindar_logo3.png">
+
+        </div>
+
+
+        <div (click)="HandleClickEvent($event)" (mouseenter)="mouseoverNzDropDown($event)"
+            (mouseout)="mouseoutNzDropDown($event)" class="p-col-fixed"
+            style=" width: 40%; margin-left: 30%; float: right;  ">
+
+            <a style="padding-top: 1rem; float: right;
+                      position: relative;   color: black;
+                      vertical-align: middle;" nz-dropdown nzPlacement="topRight" nzTrigger="hover"
+                [nzDropdownMenu]="menu">
+                <h3 style="display: inline; font: outline;font: bold;">Usuario: </h3>
+                {{userDataService.userData.userName}}
+                <i style="position: relative; top:-0.15rem;" nz-icon nzType="setting"></i>
+            </a>
+
+            <nz-dropdown-menu id="nzDropDownMenu" (mouseout)="mouseoutNzDropDown($event)" #menu="nzDropdownMenu">
+                <ul id="nzDropDownMenuList" #nzDropDownMenuList  nz-menu nzSelectable>
+
+                    <li nz-menu-item (click)="handleEndSessionButton()">
+                        <i style="position: relative; top:-0.15rem;" nz-icon nzType="logout" nzTheme="outline"></i>
+                        Cerrar Sesión
+                    </li>
+                </ul>
+            </nz-dropdown-menu>
+        </div>
+
+    </div>
+
+    <!-- <button pButton type="button" icon="pi pi-angle-left" [disabled]="isCriticalEventsSideBarDisabled"
+        (click)="HandleCriticalEventsSideBarButtonClick()" (click)="HandlePiWebConfigButton()"
+        style=" z-index: 1; position:absolute; top:17.5rem;left:96.8%; font-size: 2em; padding: 0rem;width: 1.5rem; font-weight: bolder;">
+
+    </button> -->
+
+</div>
+
+
+<p-dialog [modal]="true" #PiConfDialog [blockScroll]="false" [header]="dialogHeader" [(visible)]="displayDialog"
+    [style]="{width: '35vw'}">
+    <p
+        style=" align-items: center; display: flex; justify-content:space-evenly; font-family: Arial, Helvetica, sans-serif;">
+
+        <span style="width : 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="afServer">Servidor AF: </label>
+        </span>
+
+        <span>
+
+            <p-dropdown [style]="{'color' : '#414141', 'width':'13rem',
+                                        'position':'relative'}" id="afServer" #afServer [options]="afServersOptions"
+                (onChange)="HandleChangeAfServer()" appendTo="body" [(ngModel)]="selectedAFServer" optionLabel="label">
+            </p-dropdown>
+
+        </span>
+
+
+
+    </p>
+
+    <p
+        style="align-items: center;  display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem;">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="dataBase">Base de Datos: </label>
+        </span>
+
+
+        <p-dropdown [style]="{'color' : '#414141', 'width':'13rem',
+                                                'position':'relative'}" id="dataBase" #dataBase
+            [disabled]="isDataBaseDDDisabled" (onChange)="HandleChangeDataBase()" [options]="dataBaseOptions"
+            appendTo="body" [(ngModel)]="selectedDataBase" optionLabel="label">
+        </p-dropdown>
+
+    </p>
+
+    <p style="align-items: center;display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem; ">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="element">Planta: </label>
+        </span>
+
+
+        <p-dropdown [style]="{'color' : '#414141', 'width':'13rem',
+                                                        'position':'relative'}" id="element" #element
+            [disabled]="isElementDDDisabled" (onChange)="HandleChangeElement()" [options]="elementOptions"
+            appendTo="body" [(ngModel)]="selectedElement" optionLabel="label">
+        </p-dropdown>
+
+
+
+    </p>
+
+    <form [formGroup]="piWebUserFormGroup">
+        <p
+            style="align-items: center;display: flex; justify-content:space-evenly; margin-bottom: 0; font-family: Arial; padding-top: 1rem; ">
+
+            <span style="width: 10rem;">
+                <label style=" position: relative; font-weight: bold; " for="element">Usuario: </label>
+            </span>
+
+
+
+            <span class="p-inputgroup" style="width: 13rem;">
+                <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                <input formControlName="piWebApiFormUserName" type="text" aria-describedby="piWebApiUserName-help"
+                    [class.invalidState]="!piWebUserFormGroup.controls['piWebApiFormUserName'].valid&&piWebUserFormGroup.controls['piWebApiFormUserName'].dirty"
+                    [disabled]="isUserNameInputDisabled" (input)="HandleConfirmForm()" [(ngModel)]="piWebApiUserName"
+                    pInputText placeholder="Usuario">
+
+            </span>
+
+
+        </p>
+
+        <p
+            style="width: 100%; align-items: center;display: flex; justify-content:space-evenly; margin-bottom: 0; font-family: Arial; ">
+            <span style="width: 10rem;color:#ffffff">-</span>
+            <span
+                *ngIf="!(!piWebUserFormGroup.controls['piWebApiFormUserName'].valid&&piWebUserFormGroup.controls['piWebApiFormUserName'].dirty)"
+                style="width: 13rem; color:#ffffff">-----</span>
+            <small style="width: 13rem;text-align: right;"
+                *ngIf="!piWebUserFormGroup.controls['piWebApiFormUserName'].valid&&piWebUserFormGroup.controls['piWebApiFormUserName'].dirty"
+                id="piWebApiUserName-help" class="p-error">Nombre de usuario inválido.</small>
+        </p>
+
+        <p
+            style="align-items: center;display: flex; justify-content:space-evenly; font-family: Arial; margin-bottom:0; margin-top: 1rem; padding-top: 0rem; ">
+
+            <span style="width: 10rem;">
+                <label style=" position: relative; font-weight: bold; " for="element">Contraseña: </label>
+            </span>
+
+
+
+            <span class="p-inputgroup" style="width: 13rem;">
+                <span class="p-inputgroup-addon"><i class="pi pi-key"></i></span>
+                <p-password formControlName="piWebApiFormPassWord" [disabled]="isPassWordInputDisabled"
+                    [class.invalidState]="!piWebUserFormGroup.controls['piWebApiFormPassWord'].valid&&piWebUserFormGroup.controls['piWebApiFormPassWord'].dirty"
+                    aria-describedby="piWebApiFormPassWord-help" placeholder="Contraseña" (input)="HandleConfirmForm()"
+                    [(ngModel)]="piWebApiPass" [toggleMask]="true"></p-password>
+            </span>
+
+        </p>
+
+        <p
+            style="width: 100%; align-items: center;display: flex; justify-content:space-evenly; margin-bottom: 0; font-family: Arial; ">
+            <span style="width: 10rem;color:#ffffff">-</span>
+            <span
+                *ngIf="!(!piWebUserFormGroup.controls['piWebApiFormPassWord'].valid&&piWebUserFormGroup.controls['piWebApiFormPassWord'].dirty)"
+                style="width: 13rem; color:#ffffff">-----</span>
+            <small style="width: 13rem;text-align: right;"
+                *ngIf="!piWebUserFormGroup.controls['piWebApiFormPassWord'].valid&&piWebUserFormGroup.controls['piWebApiFormPassWord'].dirty"
+                id="piWebApiFormPassWord-help" class="p-error">Contraseña inválida.</small>
+        </p>
+
+
+    </form>
+
+    <p
+        style="align-items: center; display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem; ">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="element">Importación automática: </label>
+        </span>
+
+        <span style="width: 13rem; align-content: center; align-items: center;">
+
+            <span style="margin-left:1rem; float: right;top:-1rem;" [class.custom-label-red]="!autoImportEnabled"
+                [class.custom-label-green]="autoImportEnabled">
+                {{autoImportEnabled?'ON':'OFF'}}
+            </span>
+            <p-inputSwitch (onChange)="HandleConfirmForm()" [style]="{'float':'right'}" [(ngModel)]="autoImportEnabled">
+            </p-inputSwitch>
+        </span>
+
+
+
+    </p>
+
+    <p
+        style="align-items: center; display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem; ">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="element">Categoría: </label>
+        </span>
+
+        <span style="width: 13rem; align-content: center; align-items: center;">
+
+            <input type="text" [disabled]="isEventsCategoryInputDisabled" (input)="HandleConfirmForm()"
+                [(ngModel)]="eventsCategory" pInputText placeholder="Categoría">
+        </span>
+
+
+
+    </p>
+
+
+
+
+    <p
+        style="align-items: center; display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem; ">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="element">Intervalo de importación: </label>
+        </span>
+
+        <span style="width: 13rem; align-content: center; align-items: center; text-align: end;">
+            <span style="top:-0.1rem;"> {{autoImportSampledPeriod}} min.</span>
+            <p-slider (onChange)="HandleConfirmForm()" [animate]="true" [(ngModel)]="autoImportSampledPeriod"
+                [disabled]="!autoImportEnabled" [min]="autoImportSampledPeriodMin" [max]="autoImportSampledPeriodMax">
+
+            </p-slider>
+        </span>
+
+    </p>
+
+    <p
+        style="align-items: center; display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem; ">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="element">Rango de importación: </label>
+        </span>
+
+        <span style="width: 13rem; align-content: center; align-items: center; text-align: end;">
+            <span style="top:-0.1rem;"> {{autoImportTimeRange}} horas.</span>
+            <p-slider [animate]="true" (onChange)="HandleConfirmForm()" [(ngModel)]="autoImportTimeRange"
+                [disabled]="!autoImportEnabled" [min]="autoImportTimeRangeMin" [max]="autoImportTimeRangeMax">
+
+            </p-slider>
+        </span>
+
+    </p>
+
+    <p
+        style="align-items: center; display: flex; justify-content:space-evenly; font-family: Arial; padding-top: 1rem; ">
+
+        <span style="width: 10rem;">
+            <label style=" position: relative; font-weight: bold; " for="maxCount">Cantidad Máxima de Eventos: </label>
+        </span>
+
+        <span style="width: 13rem; align-content: center; align-items: center; text-align: end;">
+            <span style="top:-0.1rem;"> {{autoImportMaxCount}} eventos.</span>
+            <p-slider [animate]="true" (onChange)="HandleConfirmForm()" [(ngModel)]="autoImportMaxCount"
+                [disabled]="!autoImportEnabled" [min]="maxCountMin" [max]="maxCountMax">
+
+            </p-slider>
+        </span>
+
+    </p>
+
+    <p-footer>
+        <button type="button" [(disabled)]="isConfirmButton" pButton icon="pi pi-check" (click)="displayDialog=false"
+            (click)="HandleConfirmButton()" label="Confirmar">
+        </button>
+        <button type="button" pButton icon="pi pi-times" (click)="displayDialog=false" label="Cancelar"
+            class="p-button-secondary">
+        </button>
+    </p-footer>
+
+</p-dialog>
+
+<p-dialog [modal]="true" (onHide)="isEventsListMode=false" #reImportManualDialog id="reImportManualDialog"
+    position="top" [blockScroll]="false" [(visible)]="reImportManualDisplayDialog" [style]="{width: '700px'}">
+
+    <ng-template pTemplate="header">
+        <i class="pi pi-download"></i>
+        <span style="font-weight: bold; text-align: left;">{{reImportManualDialogHeader}}</span>
+    </ng-template>
+
+    <div *ngIf="!isEventsListMode" class="dialogContent">
+        <div class="dialogContentItem">
+            <p-selectButton [options]="importActionOptions" [(ngModel)]="selectedImportAction" optionLabel="label"
+                optionValue="value"></p-selectButton>
+        </div>
+
+        <div class="dialogContentItem">
+            <p-calendar (onSelect)="HandleSelectStartEndCalendar($event,'start')" #reImportStartRangeCalendar
+                (onInput)="HandleSelectStartEndCalendar($event,'start')" id="reImportStartRangeCalendar"
+                [inline]="false" [maxDate]="maxDate" [(ngModel)]="importStartRangeDate" appendTo="body"
+                dateFormat="dd/mm/yy" [showTime]="true" [readonlyInput]="false" inputId="importStartRange">
+            </p-calendar>
+            <p-calendar (onSelect)="HandleSelectStartEndCalendar($event,'end')" #reImportEndRangeCalendar
+                dateFormat="dd/mm/yy" (onInput)="HandleSelectStartEndCalendar($event,'end')"
+                [minDate]="importStartRangeDate" id="reImportEndRangeCalendar" [inline]="false" [maxDate]="maxDate"
+                [(ngModel)]="importEndRangeDate" appendTo="body" [showTime]="true" [readonlyInput]="false"
+                inputId="importEndRange"></p-calendar>
+        </div>
+
+        <div class="dialogContentItem">
+
+            <p-calendar (onSelect)="HandleSelectRangeCalendar($event)" #reImportRangeCalendar id="reImportRangeCalendar"
+                [inline]="true" [maxDate]="maxDate" [(ngModel)]="importRangeDates" selectionMode="range"
+                [showTime]="false" [readonlyInput]="true" inputId="importRange"></p-calendar>
+        </div>
+    </div>
+
+    <div *ngIf="isEventsListMode" class="eventDataViewContainer">
+        <p-dataView #eventsDataView [value]="eventsData" [paginator]="true" [rows]="5"
+            [rowsPerPageOptions]="[5,10,20,50]" pageLinks="5"
+            [style]="{'padding-top':'0.5rem', 'padding-left':'0.5rem','padding-bottom':'0.25rem'}">
+
+            <ng-template let-event pTemplate="header">
+                <div class="eDVheaderContainer">Eventos</div>
+            </ng-template>
+            <ng-template let-event pTemplate="listItem">
+                <div class="p-grid dataViewListItem" [class.criticalAlarmStyle]="event.alarmStatus===2"
+                    [class.severeAlarmStyle]="event.alarmStatus===1">
+
+                    <div class="p-col-2 dataViewStateImg">
+
+                        <a (click)="HandleMetTestIconClick(event.studyNumber)">
+
+                            <img alt="Estado" width="32" height="32" src="assets/img/state/{{event.state}}.png">
+
+                        </a>
+
+
+                    </div>
+
+                    <div class="p-col-7 dataViewEquipmentDateItem">
+                        <div class="dataViewEquipmentItem">{{event.equipment}}
+                        </div>
+                        <div class="dataViewDateTimeItem">{{event.beginDate | date: 'dd/MM/yy HH:mm:ss'}}
+                        </div>
+                        <!-- <div class="box" style="">{{event.factory}} - {{event.area}}</div> -->
+                    </div>
+
+                    <div class="p-col-3" style="text-align: end; align-self: center;">
+                        <div [class.eventClassTypeOnGoingLabel]="event.eventClassType==='Marcha'"
+                            [class.eventClassTypeStoppedLabel]="event.eventClassType==='Parada'">
+                            {{event.eventClassType }}
+                        </div>
+                        <!-- <div class="box">{{event.beginDate | date: 'dd/MM/yy HH:mm:ss'}} </div> -->
+                    </div>
+
+                </div>
+
+            </ng-template>
+
+            <ng-template pTemplate="empty">
+                <div style="text-align: center; font-weight: bold; color:rgb(184, 172, 15)">No hay eventos</div>
+            </ng-template>
+        </p-dataView>
+    </div>
+
+    <p-footer>
+        <button *ngIf="!isEventsListMode" style="margin: auto; width: 10rem; font-weight: 500;" type="button"
+            (click)="HandleConfirmReImport()" [(disabled)]="isReImportManualConfirmButton" pButton label="Confirmar">
+        </button>
+        <button *ngIf="isEventsListMode" style="margin: auto; width: 10rem; font-weight: 500;" type="button"
+            (click)="HandleConfirmReImportEventList()" [disabled]="false" pButton label="Ejecutar">
+        </button>
+
+        <!-- <button type="button" pButton icon="pi pi-times" (click)="displayDialog=false" label="Cancelar"
+            class="p-button-secondary">
+        </button> -->
+
+    </p-footer>
+</p-dialog>
+
+<p-confirmDialog #cd header="Aviso!" icon="pi pi-exclamation-triangle">
+    <ng-template pTemplate="footer">
+        <button class="p-button-secondary" type="button" pButton icon="pi pi-times" label="No"
+            (click)="cd.reject()"></button>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+    </ng-template>
+</p-confirmDialog>
+
+<p-sidebar id="criticalEventsSideBar" [(visible)]="criticalEventsSideBarVisible" [baseZIndex]="-10" position="right"
+    modal="true" [showCloseIcon]="false" [fullScreen]="false"
+    [style]="{'height':'99%','width':'25rem' , 'top':'1%', 'padding':'0rem', 'margin-left':'0rem'}">
+
+
+    <div class="p-grid p-dir-col" style="  position: relative; left:0.36rem; padding-right: -0.1rem;">
+
+        <div class="p-col" style="  align-items: center; background-color: #696969;">
+
+            <span style="color:white; font-size: 1.1rem; font-weight: bold; position: relative; top:0.3rem;">
+                Eventos - Autoimport
+            </span>
+
+            <button #reImportManualButton id="reImportManualButton" pButton type="button" icon="pi pi-download"
+                (click)="HandleReImportManualButton()" [(disabled)]="isReImportManualButtonDisabled" style=" float: right;
+                    margin-left:0rem; margin-top: 0.1rem;  margin-right: 1rem;
+                    font-size: 1.25em; padding: 0rem;width: 2rem; height: 2rem; font-weight: bolder;"
+                pTooltip="Ir a pantalla re-importación automática | manual" tooltipPosition="left">
+
+            </button>
+
+            <button #PiWebConfigButton id="PiWebConfigButton" pButton type="button" icon="pi pi-ellipsis-v"
+                (click)="HandleGetPiWebApiConfig()" [(disabled)]="isPiWebConfigButtonDisabled" style=" float: right;
+        margin-left:1.2rem; margin-top: 0.1rem;  margin-right: 0.2rem;
+        font-size: 1.25em; padding: 0rem;width: 2rem; height: 2rem; font-weight: bolder;"
+                pTooltip="Ir a configuración avanzada de PiWeb API." tooltipPosition="left">
+
+            </button>
+
+
+
+            <p-inputSwitch [style]="{'float':'right', 'margin-top':'0.2rem'}" [(ngModel)]="autoImportEnabled"
+                (onChange)="HandleAutoimportInputSwitchChange($event)" pTooltip="Activar importación automática."
+                tooltipPosition="left"></p-inputSwitch>
+
+
+
+        </div>
+
+    </div>
+
+    <div
+        style="margin-top:0.75rem;width: 100%; background-color: #696969; padding-left: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+
+        <img src="assets/img/critical-events/clock-sidebar-icon.png" width="34" height="34">
+        <span class="dtHeaderTextFormat">
+            Eventos en curso
+        </span>
+
+        <span class="dtHeaderTextFormat">: {{onGoingEventsData.length}}</span>
+        <span class="dtHeaderTextFormat" style="margin-left: 0.5rem; margin-right: 0.5rem; ">-</span>
+        <span class="dtHeaderTextFormat" style="color:#fe5f31">{{selectedCriticalEventsPeriod}}</span>
+        <button #displaySliderButton1 id="displaySliderButton1" pButton type="button" icon="pi pi-ellipsis-v"
+            (click)="HandleDisplaySliderButtonClick($event)" style=" float: right;
+                            margin-left:0rem; margin-top: 0.1rem;  margin-right: 1rem;
+                            font-size: 1.25em; padding: 0rem;width: 2rem; height: 2rem; font-weight: bolder;"
+            pTooltip="Definir período de búsqueda" tooltipPosition="left">
+
+        </button>
+
+
+    </div>
+
+    <p-scrollPanel [style]="{width: '100%', height: '43%','margin-top':'0.15rem'}">
+
+        <p-dataView #onGoingEventsDataView [value]="onGoingEventsData" [paginator]="false" [rows]="20"
+            [style]="{'padding-top':'0.5rem', 'padding-left':'0.5rem','padding-bottom':'0.25rem'}">
+
+            <ng-template let-event pTemplate="listItem">
+                <div class="p-grid dataViewListItem" [class.criticalAlarmStyle]="event.alarmStatus===2"
+                    [class.severeAlarmStyle]="event.alarmStatus===1">
+
+                    <div class="p-col-2 dataViewStateImg">
+
+                        <a (click)="HandleMetTestIconClick(event.studyNumber)">
+
+                            <img alt="Estado" width="32" height="32" src="assets/img/state/{{event.state}}.png">
+
+                        </a>
+
+
+                    </div>
+
+                    <div class="p-col-7 dataViewEquipmentDateItem">
+                        <div class="dataViewEquipmentItem">{{event.equipment}}
+                        </div>
+                        <div class="dataViewDateTimeItem">{{event.beginDate | date: 'dd/MM/yy HH:mm:ss'}}
+                        </div>
+                        <!-- <div class="box" style="">{{event.factory}} - {{event.area}}</div> -->
+                    </div>
+
+                    <div class="p-col-3" style="text-align: end; align-self: center;">
+                        <div [class.eventClassTypeOnGoingLabel]="event.eventClassType==='Marcha'"
+                            [class.eventClassTypeStoppedLabel]="event.eventClassType==='Parada'">
+                            {{event.eventClassType }}
+                        </div>
+                        <!-- <div class="box">{{event.beginDate | date: 'dd/MM/yy HH:mm:ss'}} </div> -->
+                    </div>
+
+                </div>
+
+            </ng-template>
+
+            <ng-template pTemplate="empty">
+                <div style="text-align: center; font-weight: bold; color:rgb(184, 172, 15)">No hay eventos</div>
+            </ng-template>
+
+
+        </p-dataView>
+
+
+    </p-scrollPanel>
+
+    <div
+        style="width: 100%; background-color: #696969; padding-left: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+        <img src="assets/img/critical-events/clock-sidebar-icon.png" width="34" height="34">
+        <span class="dtHeaderTextFormat">
+            Eventos sin declarar
+        </span>
+        <span class="dtHeaderTextFormat">: {{unDeclaredEventsData.length}}</span>
+    </div>
+    <p-scrollPanel [style]="{width: '100%', height: '32%'}">
+
+        <p-dataView #unDeclaredEventsDataView [value]="unDeclaredEventsData" [paginator]="false" [rows]="20"
+            [style]="{'padding-top':'0.5rem', 'padding-left':'0.5rem'}" paginatorPosition="both">
+
+            <ng-template let-event pTemplate="listItem">
+                <div class="p-grid dataViewListItem" [class.criticalAlarmStyle]="event.alarmStatus===2"
+                    [class.severeAlarmStyle]="event.alarmStatus===1">
+
+                    <div class="p-col-2 dataViewStateImg">
+
+                        <a (click)="HandleMetTestIconClick(event.studyNumber)">
+
+                            <img alt="Estado" width="32" height="32" src="assets/img/state/{{event.state}}.png">
+
+                        </a>
+
+
+                    </div>
+
+                    <div class="p-col-7 dataViewEquipmentDateItem">
+                        <div class="dataViewEquipmentItem">{{event.equipment}}
+                        </div>
+                        <div class="dataViewDateTimeItem">{{event.beginDate | date: 'dd/MM/yy HH:mm:ss'}} </div>
+                        <!-- <div class="box" style="">{{event.factory}} - {{event.area}}</div> -->
+                    </div>
+
+                    <div class="p-col-3" style="text-align: end; align-self: center;">
+                        <div [class.eventClassTypeOnGoingLabel]="event.eventClassType==='Marcha'"
+                            [class.eventClassTypeStoppedLabel]="event.eventClassType==='Parada'">
+                            {{event.eventClassType }}
+                        </div>
+                        <!-- <div class="box">{{event.beginDate | date: 'dd/MM/yy HH:mm:ss'}} </div> -->
+                    </div>
+
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="empty">
+                <div style="text-align: center;font-weight: bold; color:rgb(184, 172, 15)">No hay eventos</div>
+            </ng-template>
+
+
+        </p-dataView>
+
+    </p-scrollPanel>
+
+
+
+
+</p-sidebar>
+
+
+<p-overlayPanel (onHide)="HandleHideSliderOverlay()" id="criticalEventSliderOverlay" [showCloseIcon]="false"
+    [style]="{width: '40px','height':'8rem','margin-left':'-0.25rem', 'max-height':'26rem'}"
+    #criticalEventSliderOverlay>
+    <ng-template pTemplate>
+
+        <p-slider [style]="{}" [step]="1" [min]="1" (onSlideEnd)="HandleOnChangeCriticalEventsPeriodSlider()"
+            [max]="criticalEventsPeriodOptions.length" orientation="vertical" [(ngModel)]="criticalEventsPeriod">
+
+        </p-slider>
+        <span
+            style="display: none; font-weight: 500; color: steelblue; position: absolute; width: 5rem; top:8rem; left:0rem;">
+            {{selectedCriticalEventsPeriod}}
+        </span>
+
+    </ng-template>
+</p-overlayPanel>
+
+<p-overlayPanel id="aboutOverlay" [style]="{'opacity':'0'}" [showCloseIcon]="false"
+    [style]="{width: '18rem','height':'8rem','max-height':'26rem','margin-left':'18.5rem','margin-top':'-2rem'}"
+    #aboutOverlay>
+    <ng-template pTemplate>
+
+        <div style="display: flex; flex-direction: column;">
+
+            <div style="flex-direction: row;">
+                <img src="assets/img/icons/angular.png" width="28" height="28">
+                <span style="margin-left:1rem; font-weight: 600;">{{frontEndVersion}}</span>
+            </div>
+            <div style="flex-direction: row;margin-top: 1rem;font-weight: 600;">
+                <img src="assets/img/icons/net.png" width="27" height="28">
+                <span style="margin-left:1rem;">{{backEndVersion}}</span>
+            </div>
+        </div>
+
+
+
+    </ng-template>
+</p-overlayPanel>
+
+<!--------------------------------------------------->
+<div [@routeAnimation]="getAnimationData(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+</div>

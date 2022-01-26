@@ -1,0 +1,383 @@
+.endSessionButton {
+  top: 0.5rem;
+}
+
+button:hover {
+  background-color: #c5bca4;
+}
+.chipListMenu {
+  width: 100%;
+  position: relative;
+  top: 0.6rem;
+  /*margin-left: 0.5rem;*/
+}
+
+.initMenuDiv {
+  height: 3.5rem;
+  background-color: black;
+  margin-top: 0.1rem;
+  margin-bottom: 0rem;
+  border: 0px solid #f39100;
+  border-radius: 0px;
+  align-items: center;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+  float: right;
+}
+
+.menuSideNav {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.menuTreeItemClick {
+  border: 0.1rem solid black;
+  width: 80%;
+  margin: auto;
+  margin-top: 2rem;
+  font-weight: bold;
+  font-family: Roboto;
+  font-style: normal;
+  background-color: #f39100;
+  border-radius: 0.2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* .menuTreeItem {
+} */
+
+.menuTreeItem:hover {
+  background-color: #f39100;
+  color: white;
+}
+
+.menuTreeItemInside {
+  border: 0.1rem solid black;
+  width: 80%;
+  margin: auto;
+  margin-top: 0.1rem;
+  font-weight: bold;
+  font-family: Roboto;
+  font-style: normal;
+  background-color: rgba(231, 228, 228, 0.753);
+  border-radius: 0.2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.menuTreeItemInside:hover {
+  background-color: #f39100;
+  border: 0px;
+}
+
+.panelMenu {
+  margin: auto;
+}
+
+/**************************/
+/*Delayed Time Config Button*/
+
+#delayedMetTestButton {
+  color: #dddedf;
+  background-color: #696969;
+  border: 0px;
+}
+
+#delayedMetTestButton:hover {
+  background-color: #cecfd0;
+}
+#delayedMetTestButton:disabled {
+  color: #ff3700;
+  background-color: #cecfd0;
+  border: 0px;
+}
+
+/****************************/
+/*Side Bar*/
+
+.ui-sidebar {
+  margin-left: 0rem;
+}
+
+.ui-sidebar-right {
+  margin-left: 0rem;
+}
+
+.ui-scrollpanel-bar {
+  background-color: #fe5f31;
+}
+
+/******************************/
+/*DataView*/
+
+.criticalAlarmStyle {
+  /*background-color: rgb(187, 13, 13);*/
+  color: rgb(187, 13, 13);
+}
+
+.severeAlarmStyle {
+  color: rgb(184, 172, 15);
+}
+
+/*********************************/
+
+/*Print Style*/
+
+@media print {
+  .doNotPrint {
+    display: none !important;
+  }
+}
+
+/*****************************/
+
+.icon {
+  font-size: 1rem;
+}
+
+/*******************************/
+
+.NoConnection {
+  color: #b1b1b2;
+}
+
+/*******************************/
+
+.invalidState {
+  border-color: #c80000;
+  border: 2.2px solid #c80000;
+}
+
+/********************************/
+
+/*************************/
+/*DropDown*/
+
+body .p-dropdown-items-wrapper {
+  min-width: 2rem;
+  max-width: 13rem;
+}
+
+/**************************/
+/*PiWEe Config Button*/
+
+#PiWebConfigButton {
+  color: #dddedf;
+  background-color: #696969;
+  border: 0px;
+}
+
+#PiWebConfigButton:hover {
+  background-color: #cecfd0;
+}
+#PiWebConfigButton:disabled {
+  color: #ff3700;
+  background-color: #cecfd0;
+  border: 0px;
+}
+
+/*Re-Import Manual Button*/
+
+#reImportManualButton {
+  color: #dddedf;
+  background-color: #696969;
+  border: 0px;
+}
+
+#reImportManualButton:hover {
+  background-color: #cecfd0;
+}
+#reImportManualButton:disabled {
+  color: #ff3700;
+  background-color: #cecfd0;
+  border: 0px;
+}
+
+#displaySliderButton1 {
+  color: #dddedf;
+  background-color: #696969;
+  border: 0px;
+}
+
+#displaySliderButton1:hover {
+  background-color: #cecfd0;
+}
+#displaySliderButton1:disabled {
+  color: #ff3700;
+  background-color: #cecfd0;
+  border: 0px;
+}
+
+/****************************/
+
+/*Side Bar*/
+
+#criticalEventsSideBar .p-sidebar .p-sidebar-content {
+  padding: 0;
+  overflow-y: inherit;
+  height: 100%;
+}
+#criticalEventsSideBar .p-sidebar {
+  border: 0;
+  margin-left: 0rem;
+}
+
+.p-sidebar-right {
+  margin-left: 0rem;
+}
+
+#initMenuSideBar .p-sidebar .p-sidebar-content {
+  overflow-y: inherit;
+  height: 92.5%;
+}
+
+/****************************/
+
+/*Dialog Content*/
+
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.dialogContentItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#reImportManualDialog .p-dialog .p-dialog-footer {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+/*Dialog Calendar*/
+
+#reImportRangeCalendar .p-datepicker {
+  border: none;
+}
+
+#reImportRangeCalendar .p-datepicker table td > span.p-highlight {
+  background-color: #fe5f31;
+}
+
+#reImportStartRangeCalendar .p-calendar .p-inputtext {
+  text-align: center;
+  font-weight: 500;
+  /* border: none; */
+}
+
+#reImportEndRangeCalendar .p-calendar .p-inputtext {
+  text-align: center;
+  font-weight: 500;
+  /* border: none; */
+}
+
+/******************************************/
+
+/* Text Format*/
+
+.dtHeaderTextFormat {
+  vertical-align: sub;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+/**************************/
+/*Overlay*/
+
+/*Arrow*/
+body #aboutOverlay .p-overlaypanel:after {
+  display: none;
+}
+
+body #aboutOverlay .p-overlaypanel:before {
+  display: none;
+}
+/*************/
+
+/* body #aboutOverlay .p-overlaypanel {
+  opacity: 0.8;
+  background-color: rgba(65, 65, 65, 0.65);
+  background-color: rgba(255, 255, 255, 0.85);
+} */
+
+body #aboutOverlay .p-overlaypanel-content {
+  /* opacity: 0.8; */
+  /* padding-left: 0;
+    padding-right: 0; */
+  margin-top: 7%;
+}
+
+/*criticalEventSliderOverlay*/
+
+body #criticalEventSliderOverlay .p-overlaypanel:after {
+  left: 1.25rem;
+}
+
+body #criticalEventSliderOverlay .p-overlaypanel:before {
+  left: 1.25rem;
+}
+
+/**********************************************/
+
+.eventClassTypeOnGoingLabel {
+  color: #414141;
+  background-color: lightblue;
+  border-radius: 3px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.eventClassTypeStoppedLabel {
+  color: #414141;
+  background-color: blanchedalmond;
+  border-radius: 3px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.dataViewListItem {
+  width: 100%;
+  margin-left: 0.05rem;
+  margin-top: 0.1rem;
+  border-bottom: 2px solid #cecfd0;
+}
+
+.dataViewStateImg {
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+  align-self: center;
+}
+
+.dataViewEquipmentDateItem {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.dataViewEquipmentItem {
+  font-size: 1.075rem;
+  font-weight: bold;
+}
+
+.dataViewDateTimeItem {
+  font-size: 0.9rem;
+}
+
+.eDVheaderContainer {
+  font-weight: 900;
+  display: flex;
+  justify-content: flex-start;
+}

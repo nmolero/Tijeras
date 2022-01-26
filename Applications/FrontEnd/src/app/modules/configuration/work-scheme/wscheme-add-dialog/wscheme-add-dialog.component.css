@@ -1,0 +1,78 @@
+.formContainer{
+    width: 93%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding-bottom: 0;
+}
+
+.element{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    flex-shrink: 2;
+    justify-content: space-evenly;
+    width: 45%;
+    margin-bottom: 1rem;
+    margin-left: 0.5rem;
+
+}
+.elementLabel{
+    font-weight: bold;
+    width: 10rem;
+    color: #414141;
+    align-self: center;
+}
+
+.buttonContainer{
+    width: 93%;
+    margin: auto;
+    margin-top: 1rem;
+}
+
+.dayTimeContainer{
+    width: 93%;
+    margin: auto;
+    margin-top: 1rem;
+}
+
+.toggleButtonContainer{
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.calendarContainer{
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.calendarLabelText{
+    font-weight: bold;
+}
+
+
+::ng-deep .p-calendar .p-inputtext{
+    text-align: center;
+}
+
+::ng-deep .p-card .p-card-body{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+::ng-deep .p-dropdown-filter{
+    width: 11rem;
+    min-width: 2rem;
+}

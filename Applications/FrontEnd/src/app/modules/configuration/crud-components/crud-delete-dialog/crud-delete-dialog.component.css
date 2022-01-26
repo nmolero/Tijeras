@@ -1,0 +1,8 @@
+/* Nombre de la fila */
+::ng-deep .nameRow {
+  /* style="margin-top: 0.5rem; text-align: center; font-weight: bold; color: #ff3700; " */
+  margin-top: 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  color: #ff3700;
+}

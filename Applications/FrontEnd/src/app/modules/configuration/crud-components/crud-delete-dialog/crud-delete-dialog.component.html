@@ -1,0 +1,29 @@
+<p-dialog (onHide)="HandleHideDialog()" modal="true" blockScroll="true" [header]="header" [(visible)]="visible"
+    [style]="{width: '37vw'}">
+
+    <div *ngIf="!isDeleteSelectedItemsPressed">
+        <span *ngIf="selectedRowItem">{{singleDeleteLabel}}:
+            <span style="font-weight: bold; color: #ff3700;"> {{selectedRowItem.name}} </span>
+            ?</span>
+
+    </div>
+
+    <div *ngIf="isDeleteSelectedItemsPressed">
+        <span *ngIf="selectedRows" style="margin-top: 0.6rem;">{{multipleDeleteLabel}} ?
+            <div *ngFor="let row of selectedRows;index as i;" styleClass="nameRow">
+                {{row.name}}
+            </div>
+        </span>
+
+    </div>
+
+    <p-footer>
+        <!-- Botón para cancelar  -->
+        <button type="button" pButton icon="pi pi-times" (click)="visible=false" label="Cancelar"
+            (click)="isDeleteSelectedItemsPressed=false" class="p-button-secondary"></button>
+        <!-- Botón para eliminar -->
+        <button type="button" pButton icon="pi pi-check" (click)="visible=false" (click)="HandleDeleteConfirmButton()"
+            (click)="isDeleteSelectedItemsPressed=false" label="Confirmar"></button>
+    </p-footer>
+
+</p-dialog>

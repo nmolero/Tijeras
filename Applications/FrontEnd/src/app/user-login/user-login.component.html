@@ -1,0 +1,38 @@
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+
+<div id="formUserIndexLogin">
+    <!-- Creo el formulario para el inicio de sesión -->
+    <form class="userIndexForm" autocomplete="off">
+
+        <!-- LA imagen de la empresa  -->
+        <div id="imgEnterprise">
+            <img src="assets/img/acindar_logo3.png" alt="Imagen de la empresa de Acindar">
+        </div>
+
+        <!-- Input para el nombre de usuario  -->
+        <mat-form-field appearance="legacy">
+            <mat-label>Usuario</mat-label>
+            <input matInput #inputUser id="inputUser" placeholder="Ingresa el nombre de usuario" autofocus="true"
+                type="text">
+            <mat-icon matSuffix>account_circle</mat-icon>
+        </mat-form-field>
+
+        <!-- Input para la contraseña  -->
+        <mat-form-field appearance="legacy">
+            <mat-label>Contraseña</mat-label>
+            <input matInput #inputPassword placeholder="Ingresa tu Contraseña" id="inputPassword" type="password"
+                (keyup)="handleKeyEnter($event,inputUser.value,inputPassword.value)"
+                [ngModelOptions]="{standalone: true}" [(ngModel)]="passwordValue">
+                <mat-icon matSuffix>visibility_off</mat-icon>
+        </mat-form-field>
+
+        <!-- Botón que se encargará de hacer el inicio de sesión -->
+        <button id="buttonConfirm" #buttonConfirm mat-raised-button color="primary" class="rounded-0"
+            (click)="handleButtonConfirm(inputUser.value,inputPassword.value)" #tooltip="matTooltip"
+            matTooltip="Acceder con las credenciales ingresadas" matTooltipHideDelay="100" [disabled]="!inputUser.value"
+            type="button" routerLink="/init-menu" routerLinkActive="active">
+            Ingresar
+        </button>
+        <!--style="display: block; width: 80%; margin: auto; margin-top: 5%;"-->
+    </form>
+</div>

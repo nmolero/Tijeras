@@ -1,0 +1,26 @@
+.pageContainer{
+    width: 93%;
+    margin: auto;
+    height: 70%;
+}
+
+.panelContentContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+
+.panelButtonContainer{
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    vertical-align: middle;
+    align-items: center;
+}
+
+.dayHeader{
+    color: #ff3700;
+
+}

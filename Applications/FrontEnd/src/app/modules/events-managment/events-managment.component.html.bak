@@ -1,0 +1,548 @@
+<p-toast position="top-right" key="operationStatusInfo"></p-toast>
+
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+
+<div class="SectionMain">
+
+    <!-- Esta columna es la cabecera del CRUD  -->
+    <div class="p-col" style="width: 94%; margin: auto; margin-bottom: -10px;"> <!--Tamaño para el ancho y el relleno-->
+        <p-panel [header]="headerTitleLabel"
+            [toggleable]="true" [collapsed]="true"> <!--Este por si se collapsa el panel de la cabecera-->
+            <ng-template pTemplate="icons"> <!--Este es para el icono de la administración d filtros-->
+                <button class="p-panel-header-icon p-link" pButton type="button" label="" icon="pi pi-filter"
+                    (click)="overlayPanel.toggle($event)" (onClick)="HandleFilterConfigurationButton()"
+                    id="resetFilterButton" pTooltip="Administración de filtros personalizados" tooltipPosition="bottom"
+                    tooltipStyleClass="toolTipClass">
+                </button>
+                <!-- Recuerda que la configuración de dicha función se encuentra en el component.ts del archivo  -->
+            </ng-template>
+
+            <!-- Este form visual es la parte de la cabecera del sitio  -->
+            <form [formGroup]="datePickersForms">
+                <div class="filterContainer">
+                    <!-- Este código comentado es parte de las fechas de inicio y fin que el usuario anterior comentó -->
+                    <!-- <mat-form-field style="position: relative; margin-right: 0.65rem;">
+                        <mat-label>Fecha Inicio</mat-label>
+                        <input matInput #inputPickerBegin [matDatepicker]="pickerBegin" formControlName="startDate"
+                            [max]="startDateEnd" [(value)]="startDateBegin" [errorStateMatcher]="DatePickerErrormatcher"
+                            (input)="HandleDatePickersAuth(inputPickerBegin.value,inputPickerEnd.value)">
+                        <mat-datepicker-toggle matSuffix [for]="pickerBegin"></mat-datepicker-toggle>
+                        <mat-datepicker [startAt]="startDateBegin" #pickerBegin></mat-datepicker>
+
+                        <mat-error *ngIf="datePickersForms.hasError('endDateLessThanStartDate')">Error! Fecha inválida.
+                        </mat-error>
+
+                    </mat-form-field>
+
+                    <mat-form-field style="position: relative; margin-right: 0.65rem;">
+                        <mat-label>Fecha Fin</mat-label>
+                        <input matInput #inputPickerEnd [matDatepicker]="pickerEnd" [value]="startDateEnd"
+                            formControlName="endDate"
+                            (input)="HandleDatePickersAuth(inputPickerBegin.value,inputPickerEnd.value)"
+                            [errorStateMatcher]="DatePickerErrormatcher">
+
+                        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                        <mat-datepicker [startAt]="startDateEnd" #pickerEnd></mat-datepicker>
+
+                        <mat-error *ngIf="datePickersForms.hasError('endDateLessThanStartDate')">Error! Fecha inválida.
+                        </mat-error>
+
+
+                    </mat-form-field> -->
+                    <!-- ----------------------------------------------------------------------------------------------------------  -->
+
+                    <!-- Este viene a ser el calendario ---------------------------------------------------------------------->
+                    <!-- Uso el p-calendar ya predefinido en angular, en ves de mat-form-field  -->
+                    <p-calendar class="mr-2" [inline]="false" dateFormat="dd/mm/yy "
+                        (onInput)="HandleCalendarsValidation()" (onSelect)="HandleCalendarsValidation()" hourFormat="24"
+                        [maxDate]="maxDate" formControlName="startDate" [(ngModel)]="startDateBegin" showTime="true"
+                        [showIcon]="true" pTooltip="Fecha de inicio" tooltipPosition="right">
+                    </p-calendar> <!-- Para la fecha de comienzo-->
+
+                    <p-calendar class="mr-2" [inline]="false" dateFormat="dd/mm/yy "
+                        (onInput)="HandleCalendarsValidation()" (onSelect)="HandleCalendarsValidation()" hourFormat="24"
+                        [maxDate]="maxDate" formControlName="endDate" [(ngModel)]="startDateEnd" showTime="true"
+                        [showIcon]="true" pTooltip="Fecha final" tooltipPosition="left">
+                    </p-calendar> <!--Y esta para la fecha final-->
+
+                    <!-- Este está comentado porque son las distintas definiciones de filtrado para buscar, por lo cual está hecho con select  -->
+                    <!-- <span class="p-float-label" style="display: inline; ">
+
+                        <p-dropdown class="metTestLisDropDowns" [style]="{'color' : '#414141','min-width':'2rem' ,'width':'10rem',
+                                'position':'relative','margin-right':'0.65rem'}" id="stateDD" #stateDD
+                            [options]="stateOptions" [(ngModel)]="selectedState" [autoDisplayFirst]="false"
+                            pTooltip="Seleccione estado del evento para aplicar en el filtrado."
+                            tooltipPosition="bottom" [ngModelOptions]="{standalone: true}" optionLabel="label">
+                        </p-dropdown>
+                        <label id="stateLabel" for="stateDD">Estado</label>
+                    </span>
+
+
+                    <span class="p-float-label" style="display: inline;">
+
+                        <p-dropdown class="metTestLisDropDowns"
+                            [style]="{'color' : '#414141','min-width':'2rem' ,'width':'10rem',
+                                                                        'position':'relative','margin-right':'0.65rem'}"
+                            pTooltip="Seleccione el área para aplicar en el filtrado." [autoDisplayFirst]="false"
+                            id="areaDD" #areaDD [options]="areaOptions" [(ngModel)]="selectedArea"
+                            [ngModelOptions]="{standalone: true}" optionLabel="label">
+                        </p-dropdown>
+                        <label id="areaLabel" for="areaDD">Área</label>
+                    </span>
+
+                    <span class="p-float-label" style="display: inline;">
+
+                        <p-dropdown class="metTestLisDropDowns"
+                            [style]="{'color' : '#414141','min-width':'2rem' ,'width':'10rem',
+                                                                        'position':'relative','margin-left':'0rem','margin-right':'0.65rem'}"
+                            pTooltip="Seleccione la máquina para aplicar en el filtrado." [autoDisplayFirst]="false"
+                            id="equipmentDD" #equipmentDD [options]="equipmentOptions" [(ngModel)]="selectedEquipment"
+                            [ngModelOptions]="{standalone: true}" optionLabel="label">
+                        </p-dropdown>
+                        <label id="equipmentLabel" for="equipmentDD">Máquina</label>
+                    </span>
+
+                    <span class="p-float-label" style="display: inline;">
+
+                        <p-dropdown class="metTestLisDropDowns"
+                            [style]="{'color' : '#414141','min-width':'2rem' ,'width':'10rem',
+                                                                                            'position':'relative','margin-left':'0rem','margin-right':'0.65rem'}"
+                            pTooltip="Seleccione el tipo evento para aplicar en el filtrado." [autoDisplayFirst]="false"
+                            id="eventTypeDD" #eventTypeDD [options]="eventTypeOptions" [(ngModel)]="selectedEventType"
+                            [ngModelOptions]="{standalone: true}" optionLabel="label">
+                        </p-dropdown>
+                        <label id="eventTypeLabel" for="eventTypeDD">Tipo</label>
+                    </span>
+
+
+                    <span class="p-float-label" style="display: inline;">
+
+                        <p-dropdown class="metTestLisDropDowns"
+                            [style]="{'color' : '#414141','min-width':'2rem' ,'width':'10rem',
+                                                                                                                'position':'relative','margin-left':'0rem','margin-right':'0.65rem'}"
+                            pTooltip="Seleccione el turno para aplicar en el filtrado." [autoDisplayFirst]="false"
+                            id="shiftDD" #shiftDD [options]="shiftOptions" [(ngModel)]="selectedShift"
+                            [ngModelOptions]="{standalone: true}" optionLabel="label">
+                        </p-dropdown>
+                        <label id="shiftLabel" for="shiftDD">Turno</label>
+                    </span>
+
+                    <span class="p-float-label" style="display: inline;">
+
+                        <p-dropdown class="metTestLisDropDowns"
+                            [style]="{'color' : '#414141','min-width':'2rem' ,'width':'10rem',
+                                                                                                                                    'position':'relative','margin-left':'0rem','margin-right':'0.65rem'}"
+                            pTooltip="Seleccione el plantel para aplicar en el filtrado." [autoDisplayFirst]="false"
+                            id="crewDD" #crewDD [options]="crewOptions" [(ngModel)]="selectedCrew"
+                            [ngModelOptions]="{standalone: true}" optionLabel="label">
+                        </p-dropdown>
+                        <label id="crewLabel" for="crewDD">Plantel</label>
+                    </span> -->
+                    <!-- ------------------------------------------------------------------------------------------------------------------------------ -->
+
+                    <!-- Este es el botón de filtrado  -->
+                    <button mat-raised-button class="metTestfilterButton"
+                        (click)="HandleFilterDateButton('inputPickerBegin.value','inputPickerEnd.value')" type="button"
+                        pTooltip="Filtrar con fechas seleccionadas" tooltipPosition="bottom"
+                        tooltipStyleClass="toolTipClass" [disabled]="isFilterButtonDisabled">
+                        Filtrar
+                        <!-- Con el pTooltip le pongo la oración y el tooltipPosition la dirección  -->
+                    </button>
+
+                    <!-- Este botón es para descargar un archivo excel con toda la documentación  -->
+                    <div style="display: inline-block;  margin-right: 0.65rem; ">
+                        <button id="excelButton" (click)="dataTable.exportCSV()" pTooltip="Descargar registro" tooltipPosition="bottom"
+                            pButton pRipple label="" icon="pi pi-file-excel"></button>
+                    </div>
+
+                    <!-- Este botón es para restablecer la configuración del filtrado  -->
+                    <button mat-raised-button class="metTestResetFilterButton" type="button"
+                        (click)="HandleResetTableFilters()" pTooltip="Restablecer configuración del filtro"
+                        tooltipPosition="bottom" tooltipStyleClass="toolTipClass" [disabled]="false">
+                        Restablecer
+                    </button>
+
+                    <!-- Para que el tooltip funcione ahí que importarlo -->
+                    <button  id="btnSaveFilter" class="p-button-secondary"
+                        icon="pi pi-filter" label='Guardar filtro' type="button"
+                        pTooltip="Guardar estado actual del filtro." tooltipPosition="bottom"
+                        (click)="HandleSaveFilterState()" pButton pRipple></button>
+                </div>
+            </form>
+        </p-panel>
+    </div>
+    <!-- -------------------------------------------------------------------------------------------------------------------  -->
+
+    <!-- Este div le pertenece a la barra de herramientas de los 7 iconos  -->
+    <!-- Iconos como añadir evento, declarar evento, eliminar evento, definir evento, dividir evento, copiar declaracion y pegar declaración  -->
+    <div class="p-col tableToolbar" style="width: 93.1%; margin: auto; margin-bottom: -10px;">
+        <!-- Este botón es para declarar el evento, *ngFor es para que recorra el contenido -->
+        <!-- <button #eventActionToolbarButton [style]="{'height':'1.75rem','width':'1.75rem'}"
+            [(disabled)]="button.disabled" *ngFor="let button of toolBarButtons" class="p-button-secondary"
+            [icon]="button.icon" label='' id="{{button.name}}" type="button" (click)="button.action()"
+            (click)="HandleClickEventActionToolbar(eventActionToolbarButton.id)" [pTooltip]="button.toolTipText"
+            [tooltipPosition]="button.tooltipPosition" pButton pRipple>
+        </button> -->
+        <button class="p-button-secondary" icon="pi pi-external-link" label='' type="button" pTooltip="Declarar evento"
+                    tooltipPosition="top" pButton pRipple></button>
+    </div>
+    <!-- ----------------------------------------------------------------------------------------------------------------------------  -->
+
+    <!-- Este p-table contendrá toda la tabla  -->
+    <div class="p-col scroll-container" style="width: 94%; margin: auto;">
+        <p-table #dataTable id="dataTable" [value]="dataTableValues" [rows]="20" [paginator]="true"
+            paginatorPosition="both" [columns]="listOfColumns" [rowHover]="true" selectionMode="multiple"
+            [rowsPerPageOptions]="[10,20,30,50,100]" [(selection)]="selectedRows" dataKey="id"
+            [exportFilename]="exportFileName" (onRowSelect)="HandleRowSelect($event)" [responsive]="true"
+            (onRowUnselect)="HandleRowUnSelect($event)" (onFilter)="HandleOnFilter($event)"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+            [showCurrentPageReport]="true">
+
+            <!-- Esto es solo un filtrado - tiene una descripción de titulo y un input  -->
+            <!-- <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">Administración de Usuarios</h5>
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="usersDataTable.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Search..." />
+                        </span>
+                </div>
+            </ng-template> -->
+
+
+            <ng-template pTemplate="header" let-columns let-rowIndex="rowIndex" styleClass="responsiveTable">
+                <tr>
+                 <!-- El titulo de la fila en la tabla  -->
+                    <th *ngFor="let column of columns" [pSortableColumn]="column.field" [ngStyle]="{'width':'column.width'}"
+                        [pSortableColumnDisabled]="column.field === 'checkBoxSelect' || column.field === 'actionButtons' ">
+
+                        <span *ngIf="column.field != 'checkBoxSelect'">
+                           - {{column.header}}
+                        </span>
+
+                        <p-sortIcon *ngIf="column.field !== 'checkBoxSelect' && column.field !== 'actionButtons'"
+                            [field]="column.field">
+                        </p-sortIcon>
+
+                        <i *ngIf="column.field !== 'beginDate'&&column.field !== 'endDate'&&column.field !== 'duration'&&column.field !== 'checkBoxSelect' && column.field !== 'actionButtons'"
+                            (click)="showParamReportOP($event,column.header,column.field)"
+                            class="pi pi-info-circle"></i>
+
+                        <!-- <p-columnFilter #columnFilterDate id="columnFilterDate" *ngIf="column.field === 'beginDate'"
+                            matchMode="gte" field="beginDate" operator="and" maxConstraints="2" [showMatchModes]="true"
+                            [showOperator]="false" [matchModeOptions]="matchModeOptions" display="menu">
+                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                <p-calendar id="filterStartDateDp2" (onSelect)="HandleSelectColumnFilterDate()"
+                                    [required]="true" [inline]="false" dateFormat="dd/mm/yy " [maxDate]="maxDate"
+                                    hourFormat="24" [(ngModel)]="columnFilterStartDate" [showTime]="false"
+                                    [showIcon]="false">
+                                </p-calendar>
+                            </ng-template>
+
+                        </p-columnFilter> -->
+                    </th>
+                </tr>
+
+                <!-- El tr no funciona  -->
+                <!-- <tr id="filterTr1" class="filterTablerow"
+                    style=" height: 2rem; font-family:Arial, Helvetica, sans-serif; text-align:center; ">
+                    <th *ngFor="let column of columns" [ngStyle]="{'width':column.width}"
+                        style="text-align:center; padding-left: 0; padding-right: 0;">
+
+                        <p-calendar id="filterStartDateDp" (onSelect)="HandleSelectStartDate($event)"
+                            (onInput)="HandleSelectStartDate($event)" [required]="true" [style]="{'width':'80%'}"
+                            *ngIf="column.field==='beginDate'" [inline]="false" dateFormat="dd/mm/yy "
+                            [maxDate]="maxDate" hourFormat="24" [(ngModel)]="filterStartDate" [showTime]="false"
+                            [showIcon]="false">
+                        </p-calendar>
+
+
+                        <p-calendar id="filterEndDateDp" (onSelect)="HandleSelectEndDate($event)"
+                            (onInput)="HandleSelectEndDate($event)" [required]="true" [style]="{'width':'80%'}"
+                            *ngIf="column.field==='endDate'" [inline]="false" dateFormat="dd/mm/yy " [maxDate]="maxDate"
+                            hourFormat="24" [(ngModel)]="filterEndDate" [showTime]="false" [showIcon]="false">
+                        </p-calendar>
+                    </th>
+                </tr> -->
+
+                <!-- Esta fila contiene los filtros para buscar cada columna  -->
+                <tr class="filterTablerow" id="filterTr2">
+                    <th *ngFor="let column of columns;index as i;">
+                        <!-- Este es el calendario  de inicio-->
+                        <p-calendar id="filterStartTimeDp" (onSelect)="HandleSelectStartDate($event)"
+                            (onInput)="HandleSelectStartDate($event)" *ngIf="column.field==='beginDate'"
+                            [inline]="false" dateFormat="dd/mm/yy " hourFormat="24"
+                            [(disabled)]="isFilterStartTimeDisabled" [(ngModel)]="filterStartTime" [timeOnly]="false"
+                            [showTime]="true" [showIcon]="false">
+                        </p-calendar>
+
+                        <!-- Este es el calendario de fin  -->
+                        <p-calendar id="filterEndTimeDp" (onSelect)="HandleSelectEndDate($event)"
+                            (onInput)="HandleSelectEndDate($event)" [(disabled)]="isFilterEndTimeDisabled"
+                            *ngIf="column.field==='endDate'" [inline]="false" dateFormat="dd/mm/yy " hourFormat="24"
+                            [(ngModel)]="filterEndTime" [timeOnly]="false" [showTime]="true" [showIcon]="false">
+                        </p-calendar>
+                        <!-- ------------------------------------  -->
+
+                        <!-- Este span es de cada uno de los input que estan en la fila, menos el input de inicio, el input de final y el input de duración  -->
+                        <span *ngIf="column.field!=='beginDate' &&
+                                        column.field!=='endDate' &&
+                                        column.field!=='duration' &&
+                                        column.field!=='state'">
+                            <div class="p-col-12 p-md-4" style="width: 100%; font-size: 0.9rem;">
+                                <div class="p-inputgroup">
+                                    <input #filterInputText id="{{column.field}}"
+                                        [style]="{'width':'100%', 'text-align':'center', 'color':'#868686', 'font-weight':'bold', 'font-size':'0.7rem'}"
+                                        pInputText type="text" [(ngModel)]="column.filterValue"
+                                        [placeholder]="column.header" (input)="updateColumnFilterValues($event)"
+                                        (input)="setColumnFilterResetButtonState(columnFilterinputText)"
+                                        [pTooltip]="dataTable.filters[column.field]?.value" tooltipPosition="top"
+                                        (input)="dataTable.filter($event.target.value, column.field, 'contains')"
+                                        [value]="dataTable.filters[column.field]?.value">
+
+                                    <!-- Este botón es para limpiar la casilla escrita en la caja de texto  -->
+                                    <button #filterResetButton id="{{column.field}}" type="button" pButton pRipple
+                                        icon="pi pi-times" (click)="HandleResetColumnFilter(column)"
+                                        class="p-button-danger"></button>
+                                </div>
+                            </div>
+                        </span>
+
+                        <!-- Este es del input de duración  -->
+                        <span *ngIf="column.field==='duration'" style="width: 100%;">
+                            <div class="p-col-12 p-md-4" style="width: 100%;">
+                                <div class="p-inputgroup">
+                                    <input #filterInputText pKeyFilter="pnum" id="durationSeconds"
+                                        (input)="HandleDurationFilter($event.target,'durationSeconds')"
+                                        pKeyFilter="pint" [style]="{'width':'90%','text-align':'center'}" type="text"
+                                        pInputText [(ngModel)]="durationSliderValue" />
+                                    <span style="cursor: pointer;" class="fadeIn"
+                                        (click)="HandleChangeDurationUOM('durationSeconds')"
+                                        class="p-inputgroup-addon">{{selectedDurationUOM.label}}</span>
+                                    <button #filterResetButton id="durationSeconds" type="button" pButton pRipple
+                                        icon="pi pi-times" (click)="HandleResetColumnFilter(column)"
+                                        class="p-button-danger"></button>
+                                </div>
+                            </div>
+
+                            <p-slider (onSlideEnd)="HandleDurationFilter($event,'durationSeconds')"
+                                [(ngModel)]="durationSliderValue">
+                            </p-slider>
+                        </span>
+
+                        <!-- <span style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;
+                         " *ngIf="imgStateSource!==''&&column.field==='state'">
+                            <img alt="Estado" class="" width="32" height="32"
+                                src="assets/img/state/{{imgStateSource}}.png">
+                            <button style="width: 1.2rem; height: 1.6rem;" class="p-button-danger" icon="pi pi-times"
+                                type="button" (click)="HandleResetColumnFilter(column)" (click)="imgStateSource=''"
+                                pButton pRipple></button>
+                        </span> -->
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns" id="responsiveTable">
+                <tr #bodyTableRow id="{{'row' + rowIndex }}" (dblclick)="HandleDoubleClickRow($event,rowData)" [(selection)]="selectedRow"
+                    [pSelectableRow]="rowData" (mousedown)="HandleRowMouseDown($event,rowData)"
+                    (mousedown)="isRigthClickPressed?actionContextMenu.show($event):''" [pContextMenuRow]="rowData"
+                    [pSelectableRowIndex]="rowIndex">
+                    <!-- Muestro los resultados en cada fila -->
+                    <td [class.eventErrorCell]="!rowData['eventCondition']"
+                        [class.notFinishedCell]="rowData['state']==='notFinished'" #tableCell class="text-center"
+                        *ngFor="let col of columns;index as i;" id="{{col.field + rowIndex}}">
+
+                        <span *ngIf="col.field!=='beginDate' &&
+                                     col.field!=='endDate' &&
+                                     col.field!=='eventType' &&
+                                     col.field!=='duration' &&
+                                     col.field!=='state'">
+                            {{rowData[col.field]}}
+                        </span>
+
+                        <div *ngIf="col.field==='eventType'"
+                            [class.semiAutomaticEvent]="rowData['eventTypeName']==='SemiAutomatico'">
+                            {{ rowData[col.field]}}
+                        </div>
+
+                        <span *ngIf="col.field==='beginDate'||col.field==='endDate'">
+                            {{ rowData[col.field] ? (rowData[col.field] | date: 'dd/MM/yy HH:mm:ss') : '-' }}
+                        </span>
+
+                        <!-- <span *ngIf="col.field==='duration'">
+                            {{ rowData[col.field] ? (rowData[col.field]*1000 | date: 'd, H:mm:ss': 'UTC') : '-' }}
+                        </span> -->
+
+                        <span *ngIf="col.field==='duration'">
+                            {{ rowData[col.field] ? (rowData[col.field]) : '-' }}
+                        </span>
+
+                        <span *ngIf="col.field==='state'">
+                            <!-- <img style="margin:auto;" alt="Estado" width="32" height="32" src="assets/img/state/{{rowData[col.field]}}.png"> -->
+                            <i class="fas fa-times-circle m-auto text-danger" style="font-size: 1.5rem;" alt="Estado"></i>
+                        </span>
+                    </td>
+
+                </tr>
+            </ng-template>
+
+            <!-- Esa paginación es para mostrar el total de eventos  -->
+            <ng-template pTemplate="paginatorleft">
+                <div style="margin-left:1rem;font-weight: bold; " class="p-d-flex p-ai-center p-jc-between">
+                    Total:
+                    <span style=" margin-left: 0.25rem; color: #ff3700;">
+                        {{dataTableValues ? dataTableValues.length : 0 }}
+                        eventos
+                    </span>
+                </div>
+                <!-- Para resumir este muestra el total de eventos que hay  -->
+            </ng-template>
+
+            <!-- En este Ng se encuentra el select para elegir los meses actuales y el botón para mostrar la otra fila  -->
+            <ng-template pTemplate="paginatorright">
+                <span class="d-inline" >
+                    <!-- Este es el select que sirve para especificar los meses  -->
+                    <p-dropdown class="metTestLisDropDowns" tooltipPosition="left"
+                        pTooltip="Seleccione estado del evento para aplicar en el filtrado." [autoDisplayFirst]="false"
+                        id="defaultLapseOfTimeDD" #defaultLapseOfTimeDD (onChange)="HandleChangeDefaultLapseOfTime()"
+                        [options]="defaultLapseOfTimeOptions" [(ngModel)]="selectedDefaultLapseOfTime"
+                        [ngModelOptions]="{standalone: true}" optionLabel="label">
+                    </p-dropdown>
+                    <!-- Estos eran los estilos de antes  -->
+                    <!-- [style]="{'color' : '#414141','min-width':'2rem' ,'width':'10rem',
+                    'position':'relative','margin-left':'0.25rem','margin-right':'0.65rem'}" -->
+                    <!-- <label id="defaultLapseOfTimeLabel" for="defaultLapseOfTimeDD"></label> -->
+                </span>
+                <!-- Este botón es para mostrar la otra fila oculta -->
+                <button #showColumnFilterButton id="showColumnFilterButton" pButton class="showColumnFilter" type="button" label=""
+                    [icon]="isDisplayCollumnFilters?'pi pi-minus':'pi pi-plus'" (click)="HandleShowColumnButtonClick()"
+                    [class.p-button-info]="isDisplayCollumnFilters" [class.p-button-danger]="isDisplayCollumnFilters===false"
+                    pTooltip="Desplegar configuración de filtros" tooltipPosition="right" tooltipStyleClass="toolTipClass">
+                </button>
+            </ng-template>
+            <!-- ------------------------  -->
+
+            <!-- Esta fila es un resultado a mostrar si el filtro no se encuentra  -->
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td style="text-align:center; height: 2rem;" [attr.colspan]="columns.length">
+                        Sin Datos
+                    </td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+
+        <!-- <p-contextMenu #actionContextMenu appendTo="body" [model]="actionMenuItems"></p-contextMenu> -->
+
+    </div>
+
+</div>
+
+<!-- Este es el panel de filtros  -->
+<p-overlayPanel id="overlayPanel" [showCloseIcon]="false" [style]="{width: '450px'}" #overlayPanel>
+    <ng-template pTemplate>
+
+        <p-dataView #dataView [value]="dataViewValues" [paginator]="false" [rows]="20"
+            [style]="{'padding-top':'0.5rem', 'padding-left':'0.5rem','padding-bottom':'0.25rem'}"
+            paginatorPosition="both">
+
+            <!-- Este template es para la parte de añadir filtro -->
+            <ng-template pTemplate="header">
+                <div>
+                    <span>Filtros →</span>
+                    <button style="width: 1.3rem; height: 1.3rem; margin-left: 0.1rem;" class="p-button-success" pButton
+                        type="button" label="" icon="pi pi-plus" pTooltip="Agregar configuración."
+                        tooltipPosition="bottom" [disabled]="isAddFilterConfigDisabled" (click)="HandleAddItem()"
+                        tooltipStyleClass="toolTipClass">
+                    </button>
+                </div>
+            </ng-template>
+
+
+            <!-- Falta arreglar esto  -->
+            <!-- Esta sería la configuración que redirige hacia un formulario para agregar una configuración -->
+            <ng-template let-dataValue let-rowIndex="rowIndex" pTemplate="listItem">
+
+                <div class="p-grid" [@slideInDownOnEnter] [@fadeOutUpOnLeave] [class.activeFilter]="dataValue.active"
+                    style="width: 99.5%; margin-left:0.05rem; margin-top: 0.1rem; border-bottom: 2px solid #CECFD0;">
+
+                    <div class="p-col-9" style="padding-top: 1.3rem;">
+                            <!-- <a (click)="HandleMetTestIconClick(plannedMetTest.studyNumber)">
+                            <img src="assets/img/{{plannedMetTest.studyStatus}}.png" width="32.8" height="42"></a> -->
+
+
+                        <p-radioButton *ngIf="!dataValue.isEditionMode" (onClick)="HandleRadioButtonClick($event)"
+                            name="active" [value]="dataValue.name" [(ngModel)]="activeFilter" inputId="city1">
+                        </p-radioButton>
+                        <a *ngIf="!dataValue.isEditionMode" style="margin-left: 1rem;" [@fadeInOnEnter]
+                            (click)="dataValue.public=!dataValue.public"
+                            [class.custom-label-gray-green]="dataValue.public"
+                            [class.custom-label-green-gray]="!dataValue.public">
+                            {{ dataValue.key }}
+                        </a>
+
+                        <div class="p-inputgroup" *ngIf="dataValue.isEditionMode" [@fadeInOnEnter]>
+                            <span class="p-inputgroup-addon" style="height: 1.5rem;"><i class="pi pi-pencil"
+                                    style="line-height: 1.25;"></i></span>
+
+                            <span class="p-float-label" >
+                                <input #keyInputText id="{{'keyInputText' +rowIndex}}" type="text"
+                                    style="font-weight: bold; width: 8.3rem; height: 1.5rem;" pInputText
+                                    (keyup)="HandleKeyInput($event,dataValue)" [(ngModel)]="dataValue.key"
+                                    placeholder="">
+
+                                <label for="{{'keyInputText' +rowIndex}}"
+                                    style="font-weight:bold;">Identificador</label>
+
+
+                            </span>
+
+                            <button pButton type="button" style="height: 1.5rem;"
+                                (click)="HandleConfirmFilterName(dataValue)" [disabled]="isKeyConfirmButtonDisabled"
+                                icon="pi pi-check" tooltipPosition="bottom" tooltipStyleClass="toolTipClass"
+                                pTooltip="Confirmar identificador de filtro." class="p-button-success"></button>
+                            <button pButton type="button" style="height: 1.5rem;"
+                                [disabled]="isKeyConfirmButtonDisabled" icon="pi pi-times" tooltipPosition="bottom"
+                                pTooltip="Cancelar ingreso de identifidor." tooltipStyleClass="toolTipClass"
+                                (click)="HandleCancelEdit(dataValue)" class="p-button-error"></button>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="p-col-3" style="text-align: end; padding-top: 1rem; ">
+                        <button style="width: 1.8rem; height: 1.8rem; margin-left: 0%; margin-right: 4rem;" pButton
+                            pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                            (click)="HandleEditItem(dataValue,rowIndex)" [disabled]="isButtonsDisabled"></button>
+                        <button #deleteRowButton pButton pRipple icon="pi pi-trash" [disabled]="isButtonsDisabled"
+                            style="width: 1.8rem; height: 1.8rem;" class="p-button-rounded p-button-warning"
+                            (click)="HandleDeleteItem(dataValue)"></button>
+                    </div>
+
+                </div>
+
+
+
+            </ng-template>
+
+
+            <!-- Mensaje del filtro  -->
+            <ng-template pTemplate="empty">
+                <span style="width: 100%; text-align: center; font-weight: 800; text-decoration: underline;">
+                    No se han configurado filtros
+                </span>
+            </ng-template>
+
+
+        </p-dataView>
+
+    </ng-template>
+</p-overlayPanel>
+
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

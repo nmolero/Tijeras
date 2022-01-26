@@ -1,0 +1,17 @@
+<p-table [value]="pruebas" responsiveLayout="scroll" height="200" [rows]="1" [showCurrentPageReport]="true"
+[rowsPerPageOptions]="[5,10,15]" [paginator]="true" currentPageReportTemplate="De {first} a {last}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th colspan="2">Despunte</th>
+            <th colspan="2">Descole</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-prueba>
+        <tr>
+            <td># {{prueba.processIdId}}</td>
+            <td>{{prueba.nominal}}</td>
+            <td># {{prueba.processIdId}}</td>
+            <td>{{prueba.nominal}}</td>
+        </tr>
+    </ng-template>
+</p-table>

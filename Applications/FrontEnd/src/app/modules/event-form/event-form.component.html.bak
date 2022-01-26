@@ -1,0 +1,73 @@
+<p-toast position="top-right" key="operationStatusInfo"></p-toast>
+
+<app-block-ui *ngIf="isLoadingResults"></app-block-ui>
+
+<!-- En este Componente está el formulario de datos del evento  -->
+<!-- La cabecera del formulario que será collapsado  -->
+<div class="move">
+    <div id="HeaderForm">
+        <!-- Esta es la parte donde declarar evento es el que se collapsa  -->
+        <div class="p-col mb-1 rounded-top-4">
+            <app-crud-panel [header]="headerTitleLabel" [collapsed]="collapsed" styleClass="headerTitle"></app-crud-panel>
+        </div>
+
+        <p-card styleClass="card">
+            <!-- Titulo del formulario  -->
+            <div class="cardTitle">Datos del evento</div>
+
+            <!-- Esto es lo que hay dentro del formulario -->
+            <div class="formContainer">
+                <div class="element" *ngFor="let element of formData.elements"><!--Se hace un bucle for para que recorra-->
+                    <!--Ese ngForm llama a todos los elementos del formulario-->
+                    <!-- Este label lo que hace es mostrar los nombres en general de cada input  -->
+                    <label class="elementLabel">{{element.label}}: </label>
+
+                    <!-- Esta sección del input trae información del servidor para los label de Área, Máquina y Parada  -->
+                    <input *ngIf="element.type === inputTypes.INPUT_TEXT" (input)="HandleValidateForm()"
+                        class="Inputs" pInputText [disabled]="element.disabled" [type]="element.configuration.inputType"
+                        [(ngModel)]="element.value" [placeholder]="element.label">
+
+                    <!-- Este es para la lista desplegable de productos -->
+                    <p-dropdown *ngIf="element.type === inputTypes.DROPDOWN" appendTo="body" filter="true"
+                        [disabled]="element.disabled" (onChange)="HandleValidateForm()" styleClass="Products"
+                        [options]="element.configuration.options" [(ngModel)]="element.value" optionLabel="label"
+                        [disabled]="element.disabled">
+                    </p-dropdown>
+
+                    <!-- Esta es para la sección de observación  -->
+                    <textarea *ngIf="element.type === inputTypes.TEXT_AREA"
+                        [disabled]="element.disabled" pInputTextarea [(ngModel)]="element.value"></textarea>
+
+                    <!-- Este es para mostrar las fechas de inicio y fin del evento declarado -->
+                    <p-calendar *ngIf="element.type === inputTypes.CALENDAR" [inline]="false"
+                        (onSelect)="HandleValidateForm()" (onInput)="HandleValidateForm()" [disabled]="element.disabled"
+                        dateFormat="dd/mm/yy " hourFormat="24" [maxDate]="element.maxDate" [(ngModel)]="element.value"
+                        showTime="true" [showIcon]="false" styleClass="Calendar">
+                    </p-calendar>
+
+                    <!-- Estos son los select que estan en forma de cascada -->
+                    <p-cascadeSelect *ngIf="element.type === inputTypes.CASCADE" [(ngModel)]="element.value"
+                        (onChange)="HandleValidateForm()" [disabled]="element.disabled"
+                        [options]="element.configuration.treeOptions" optionLabel="text" optionGroupLabel="text"
+                        [optionGroupChildren]="['nodes','nodes','nodes','nodes','nodes',]"
+                        styleClass="Select" [placeholder]="element.configuration.placeholder">
+                    </p-cascadeSelect>
+                </div>
+            </div>
+        </p-card>
+
+
+        <!-- Div de los botones para ejecutar la acción  -->
+        <div class="actionButtonsContainer">
+            <!-- Este botón cancela la acción  -->
+            <button pRipple type="button" pButton icon="pi pi-times" label="Cancelar"
+                class="p-button-secondary">
+            </button>
+            <!-- Este botón declara la acción  -->
+            <button pRipple style="margin-left: 1rem;" type="button" [disabled]="isConfirmButtonDisabled" pButton
+                (click)="HandleConfirmButton()" icon="pi pi-check" [label]="confirmButtonLabel">
+            </button>
+
+        </div>
+    </div>
+</div>

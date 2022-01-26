@@ -1,0 +1,6 @@
+::ng-deep .panel {
+  width: 93%;
+  margin: auto;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-top: 0.5rem;
+}
